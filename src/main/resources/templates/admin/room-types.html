@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="bg-theme bg-theme2">
+
+<!-- Start wrapper-->
+<div id="wrapper">
+
+    <!--Start sidebar-wrapper-->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header th:replace="admin/fragments/header :: header"></header>
+    <!--End topbar header-->
+
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Room Type Management</h5>
+                    <div class="btn-group float-sm-left">
+                        <a th:href="@{/admin/room-types/new}" class="btn btn-light">Add New Room Type</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="rt : ${roomTypes}">
+                                <td th:text="${rt.id}">1</td>
+                                <td th:text="${rt.name}">Standard Single</td>
+                                <td th:text="${rt.description}">Description...</td>
+                                <td>
+                                    <a th:href="@{/admin/room-types/edit/{id}(id=${rt.id})}" class="btn btn-light btn-sm">Edit</a>
+                                    <a th:href="@{/admin/room-types/delete/{id}(id=${rt.id})}" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Delete this room type?')">Delete</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!--End content-wrapper-->
+        <!--Start Back To Top Button-->
+        <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+        <!--End Back To Top Button-->
+
+        <!--start color switcher-->
+        <!--end color switcher-->
+
+    </div><!--End wrapper-->
+</div>
+<!--Start footer-->
+<footer th:replace="admin/fragments/footer :: footer"></footer>
+<!--End footer-->
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="admin/fragments/script :: script"></div>
+
+
+</body>
+</html>

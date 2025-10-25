@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="bg-theme bg-theme2">
+
+<!-- Start wrapper-->
+<div id="wrapper">
+
+    <!--Start sidebar-wrapper-->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header th:replace="admin/fragments/header :: header"></header>
+    <!--End topbar header-->
+
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title" th:text="${roomDto.id == null} ? 'Add New Room' : 'Edit Room'">Room Form</div>
+                        <hr>
+                        <form th:action="@{/admin/rooms/save}" th:object="${roomDto}" method="post">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="form-group">
+                                <label for="roomNumber">Room Number</label>
+                                <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="roomTypeId">Room Type</label>
+                                <select class="form-control" id="roomTypeId" th:field="*{roomTypeId}" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option th:each="rt : ${allRoomTypes}"
+                                            th:value="${rt.id}"
+                                            th:text="${rt.name}">Standard Single</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price (per night)</label>
+                                <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrl">Image URL</label>
+                                <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" placeholder="e.g., /sona/img/rooms/room-1.jpg">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isAvailable" th:field="*{available}">
+                                <label class="form-check-label" for="isAvailable">
+                                    Is Available
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-light px-5">Save</button>
+                                <a th:href="@{/admin/rooms}" class="btn btn-light px-5">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><!--End content-wrapper-->
+        </div>
+        <!--Start Back To Top Button-->
+        <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+        <!--End Back To Top Button-->
+
+        <!--start color switcher-->
+        <!--end color switcher-->
+
+    </div><!--End wrapper-->
+</div>
+
+<!--Start footer-->
+
+<!--End footer-->
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="admin/fragments/script :: script"></div>
+<footer th:replace="admin/fragments/footer :: footer"></footer>
+
+
+</body>
+</html>
