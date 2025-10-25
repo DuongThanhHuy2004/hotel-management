@@ -32,6 +32,11 @@ public class SecurityConfig {
                                 .requestMatchers("/sona/**", "/dashtreme/**").permitAll()
                                 .requestMatchers("/admin/dashboard").hasRole("ADMIN")
                                 .requestMatchers("/admin/users/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/room-types/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/rooms/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/bookings/**").hasRole("ADMIN")
+                                .requestMatchers("/rooms", "/room-details/**").permitAll()
+                                .requestMatchers("/booking/**").authenticated()
                                 .anyRequest().authenticated()
                 ).formLogin(
                         form -> form

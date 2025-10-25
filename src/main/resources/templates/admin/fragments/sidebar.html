@@ -1,6 +1,6 @@
 <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true" th:fragment="sidebar">
     <div class="brand-logo">
-        <a href="index.html">
+        <a th:href="@{/admin/dashboard}">
             <img th:src="@{/dashtreme/images/logo-icon.png}" class="logo-icon" alt="logo icon">
             <h5 class="logo-text">Dashtreme Admin</h5>
         </a>
@@ -14,20 +14,20 @@
         </li>
 
         <li>
-            <a th:href="@{/dashtreme/icons.html}">
-                <i class="zmdi zmdi-invert-colors"></i> <span>UI Icons</span>
+            <a th:href="@{/admin/room-types}">
+                <i class="zmdi zmdi-view-list"></i> <span>Room Type Management</span>
             </a>
         </li>
 
         <li>
-            <a th:href="@{/dashtreme/forms.html}">
-                <i class="zmdi zmdi-format-list-bulleted"></i> <span>Forms</span>
+            <a th:href="@{/admin/rooms}">
+                <i class="zmdi zmdi-hotel"></i> <span>Room Management</span>
             </a>
         </li>
 
         <li>
-            <a th:href="@{/dashtreme/tables.html}">
-                <i class="zmdi zmdi-grid"></i> <span>Tables</span>
+            <a th:href="@{/admin/bookings}">
+                <i class="zmdi zmdi-book"></i> <span>Bookings</span>
             </a>
         </li>
 
