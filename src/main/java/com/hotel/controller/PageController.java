@@ -1,5 +1,6 @@
 package com.hotel.controller;
 
+import com.hotel.service.BookingService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -7,13 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.hotel.service.RoomService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Controller
 public class PageController {
     private final RoomService roomService;
+    private final BookingService bookingService;
 
-    public PageController(RoomService roomService) {
+    public PageController(RoomService roomService, BookingService bookingService) {
         this.roomService = roomService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping("/")
@@ -50,5 +55,20 @@ public class PageController {
             // (Nếu không tìm thấy phòng)
             return "redirect:/rooms?error=notFound";
         }
+    }
+    @GetMapping("/my-bookings")
+    public String myBookings(Model model, Authentication authentication) {
+        // 1. Kiểm tra xem đã đăng nhập chưa
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+
+        // 2. Lấy username
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+
+        // 3. Lấy danh sách booking và đưa ra view
+        model.addAttribute("bookings", bookingService.findBookingsByUsername(username));
+
+        return "client/my-bookings"; // (Sẽ tạo ở bước 5)
     }
 }

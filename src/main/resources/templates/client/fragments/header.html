@@ -1,4 +1,4 @@
-<header class="header-section" th:fragment="header">
+<header class="header-section" th:fragment="header" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -59,6 +59,17 @@
                                 </li>
                                 <li><a href="./blog.html">News</a></li>
                                 <li><a href="./contact.html">Contact</a></li>
+                                <li sec:authorize="isAuthenticated()">
+                                    <a th:href="@{/my-bookings}">My Bookings</a>
+                                </li>
+
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a th:href="@{/login}">Login</a>
+                                </li>
+
+                                <li sec:authorize="isAuthenticated()">
+                                    <a th:href="@{/logout}">Logout</a>
+                                </li>
                             </ul>
                         </nav>
                         <div class="nav-right search-switch">

@@ -94,4 +94,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus("CANCELED");
         bookingRepository.save(booking);
     }
+
+    public List<Booking> findBookingsByUsername(String username) {
+        return bookingRepository.findByUserUsernameOrderByBookingDateDesc(username);
+    }
 }
