@@ -109,16 +109,28 @@
                         </thead>
                         <tbody>
                         <tr th:each="b : ${bookings}">
-                            <td th:text="${b.room.roomType.name}">Deluxe Room</td>
-                            <td th:text="${b.checkInDate}">2025-10-26</td>
-                            <td th:text="${b.checkOutDate}">2025-10-30</td>
-                            <td th:text="${'$' + b.totalPrice}">$400</td>
+
                             <td>
-                                        <span th:text="${b.status}"
-                                              th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
-                                                              (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">
-                                            PENDING
-                                        </span>
+                                <strong th:text="${b.room.roomType.name}">Deluxe Room</strong>
+                                <ul th:if="${!b.services.isEmpty()}" style="font-size: 0.9em; margin-top: 5px; list-style-type: none; padding-left: 0;">
+                                    <li th:each="s : ${b.services}" th:text="${s.name}">
+                                        Laundry
+                                    </li>
+                                </ul>
+                            </td>
+
+                            <td th:text="${b.checkInDate}">2025-10-26</td>
+
+                            <td th:text="${b.checkOutDate}">2025-10-30</td>
+
+                            <td th:text="${'$' + #numbers.formatDecimal(b.totalPrice, 1, 2)}">$415.00</td>
+
+                            <td>
+            <span th:text="${b.status}"
+                  th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
+                                  (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">
+                PENDING
+            </span>
                             </td>
                         </tr>
                         </tbody>

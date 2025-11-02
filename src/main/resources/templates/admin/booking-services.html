@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="bg-theme bg-theme2">
+
+<!-- Start wrapper-->
+<div id="wrapper">
+
+    <!--Start sidebar-wrapper-->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header th:replace="admin/fragments/header :: header"></header>
+    <!--End topbar header-->
+
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row pt-2 pb-2">
+                <div class="col-sm-9"><h4 class="page-title">Manage Services for Booking #<span th:text="${booking.id}">1</span></h4></div>
+                <div class="col-sm-3">
+                    <a th:href="@{/admin/bookings}" class="btn btn-light float-sm-right">Back to Bookings</a>
+                </div>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>User:</strong> <span th:text="${booking.user.username}"></span></p>
+                    <p><strong>Room:</strong> <span th:text="${booking.room.roomNumber}"></span></p>
+                    <h5 class="card-title">Total Price (Updated): $<span th:text="${booking.totalPrice}"></span></h5>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Add Service</h5>
+                    <form th:action="@{/admin/bookings/add-service}" method="post">
+                        <input type="hidden" name="bookingId" th:value="${booking.id}">
+                        <div class="form-group">
+                            <label for="serviceId">Select Service</label>
+                            <select class="form-control" id="serviceId" name="serviceId" required>
+                                <option value="">-- Choose a service --</option>
+                                <option th:each="s : ${allServices}"
+                                        th:value="${s.id}"
+                                        th:text="${s.name + ' ($' + s.price + ')'}">
+                                    Laundry ($15.0)
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-light px-5">Add Service</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Added Services</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${booking.services.isEmpty()}">
+                                <td colspan="3">No services added yet.</td>
+                            </tr>
+                            <tr th:each="s : ${booking.services}">
+                                <td th:text="${s.name}">Laundry</td>
+                                <td th:text="${'$' + s.price}">$15.0</td>
+                                <td>
+                                    <a th:href="@{/admin/bookings/{bookingId}/remove-service/{serviceId}(bookingId=${booking.id}, serviceId=${s.id})}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Remove this service?')">Remove</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Start footer-->
+<footer th:replace="admin/fragments/footer :: footer"></footer>
+<!--End footer-->
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="admin/fragments/script :: script"></div>
+
+
+</body>
+</html>

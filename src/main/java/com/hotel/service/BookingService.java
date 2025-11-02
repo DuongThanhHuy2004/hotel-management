@@ -16,5 +16,8 @@ public interface BookingService {
     void confirmBooking(Long id);
     void cancelBooking(Long id);
 
+    void addServiceToBooking(Long bookingId, Long serviceId);
+    void removeServiceFromBooking(Long bookingId, Long serviceId);
+
     List<Booking> findBookingsByUsername(String username);
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="bg-theme bg-theme2">
+
+<!-- Start wrapper-->
+<div id="wrapper">
+
+    <!--Start sidebar-wrapper-->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header th:replace="admin/fragments/header :: header"></header>
+    <!--End topbar header-->
+
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row pt-2 pb-2">
+                <div class="col-sm-9">
+                    <h4 class="page-title" th:text="${serviceDto.id == null} ? 'Add New Service' : 'Edit Service'">Service Form</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form th:action="@{/admin/services/save}" th:object="${serviceDto}" method="post">
+                                <input type="hidden" th:field="*{id}">
+
+                                <div class="form-group">
+                                    <label for="name">Service Name</label>
+                                    <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-light px-5">Save</button>
+                                <a th:href="@{/admin/services}" class="btn btn-light px-5">Cancel</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Start footer-->
+
+<!--End footer-->
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="admin/fragments/script :: script"></div>
+<footer th:replace="admin/fragments/footer :: footer"></footer>
+
+
+</body>
+</html>

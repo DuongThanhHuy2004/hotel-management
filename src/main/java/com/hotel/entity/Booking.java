@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.HashSet;
 
 @Getter
 @Setter
@@ -41,4 +43,12 @@ public class Booking {
     protected void onCreate() {
         bookingDate = LocalDateTime.now();
     }
+
+    @ManyToMany(fetch = FetchType.EAGER) // Dùng EAGER để luôn tải service theo booking
+    @JoinTable(
+            name = "booking_services",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<HotelService> services = new HashSet<>();
 }

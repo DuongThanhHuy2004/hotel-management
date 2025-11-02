@@ -11,18 +11,25 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import com.hotel.entity.HotelService;
+import com.hotel.repository.ServiceRepository;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
-public class BookingServiceImpl implements BookingService {
+public
+class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+    private final ServiceRepository serviceRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, RoomRepository roomRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, RoomRepository roomRepository, ServiceRepository serviceRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
@@ -47,18 +54,27 @@ public class BookingServiceImpl implements BookingService {
         Room room = roomRepository.findById(bookingDto.getRoomId())
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
-        // 4. Tính toán
-        long numberOfNights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
-        double totalPrice = room.getPrice() * numberOfNights;
+        // 4. (MỚI) Lấy danh sách dịch vụ
+        Set<HotelService> services = new HashSet<>();
+        if (bookingDto.getServiceIds() != null && !bookingDto.getServiceIds().isEmpty()) {
+            services.addAll(serviceRepository.findAllById(bookingDto.getServiceIds()));
+        }
 
-        // 5. Tạo booking
+        // 5. (MỚI) Tính toán lại tổng tiền
+        long numberOfNights = ChronoUnit.DAYS.between(bookingDto.getCheckInDate(), bookingDto.getCheckOutDate());
+        double roomPrice = room.getPrice() * numberOfNights;
+        double servicesPrice = services.stream().mapToDouble(HotelService::getPrice).sum();
+        double totalPrice = roomPrice + servicesPrice;
+
+        // 6. Tạo booking
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setRoom(room);
         booking.setCheckInDate(bookingDto.getCheckInDate());
         booking.setCheckOutDate(bookingDto.getCheckOutDate());
-        booking.setTotalPrice(totalPrice);
-        booking.setStatus("PENDING"); // Mặc định là PENDING
+        booking.setTotalPrice(totalPrice); // Dùng tổng tiền mới
+        booking.setStatus("PENDING");
+        booking.setServices(services); // Gán dịch vụ vào đơn
 
         return bookingRepository.save(booking);
     }
@@ -97,5 +113,50 @@ public class BookingServiceImpl implements BookingService {
 
     public List<Booking> findBookingsByUsername(String username) {
         return bookingRepository.findByUserUsernameOrderByBookingDateDesc(username);
+    }
+
+    private void recalculateTotalPrice(Booking booking) {
+        // Lấy giá phòng gốc
+        long numberOfNights = ChronoUnit.DAYS.between(booking.getCheckInDate(), booking.getCheckOutDate());
+        double roomPrice = booking.getRoom().getPrice() * numberOfNights;
+
+        // Cộng thêm giá của tất cả dịch vụ
+        double servicesPrice = booking.getServices().stream()
+                .mapToDouble(HotelService::getPrice)
+                .sum();
+
+        booking.setTotalPrice(roomPrice + servicesPrice);
+    }
+
+    @Override
+    public void addServiceToBooking(Long bookingId, Long serviceId) {
+        Booking booking = findById(bookingId);
+        HotelService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+
+        // Thêm dịch vụ vào đơn
+        booking.getServices().add(service);
+
+        // Tính lại tổng tiền
+        recalculateTotalPrice(booking);
+
+        // Lưu lại
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void removeServiceFromBooking(Long bookingId, Long serviceId) {
+        Booking booking = findById(bookingId);
+        HotelService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+
+        // Xóa dịch vụ khỏi đơn
+        booking.getServices().remove(service);
+
+        // Tính lại tổng tiền
+        recalculateTotalPrice(booking);
+
+        // Lưu lại
+        bookingRepository.save(booking);
     }
 }

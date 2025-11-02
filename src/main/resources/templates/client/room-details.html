@@ -210,7 +210,18 @@
                             <label for="check-out">Check Out:</label>
                             <input type="date" class="date-input" id="check-out" name="checkOutDate" required>
                         </div>
-
+                        <div class="select-option" style="margin-top: 20px;">
+                            <label>Add Services:</label>
+                            <div th:each="service : ${allServices}" class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                       name="serviceIds" th:value="${service.id}"
+                                       th:id="${'service-' + service.id}">
+                                <label class="form-check-label" th:for="${'service-' + service.id}">
+                                    <span th:text="${service.name}">Giặt ủi</span>
+                                    (<span th:text="${'$' + service.price}">$15</span>)
+                                </label>
+                            </div>
+                        </div>
                         <button type="submit">Book Now</button>
                     </form>
                 </div>

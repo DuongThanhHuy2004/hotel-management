@@ -10,15 +10,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.hotel.service.ServiceService;
 
 @Controller
 public class PageController {
     private final RoomService roomService;
     private final BookingService bookingService;
+    private final ServiceService serviceService;
 
-    public PageController(RoomService roomService, BookingService bookingService) {
+    public PageController(RoomService roomService, BookingService bookingService, ServiceService serviceService) {
         this.roomService = roomService;
         this.bookingService = bookingService;
+        this.serviceService = serviceService;
     }
 
     @GetMapping("/")
@@ -48,7 +51,8 @@ public class PageController {
     public String roomDetails(@PathVariable Long id, Model model) {
         try {
             model.addAttribute("room", roomService.findById(id));
-            // (Bạn có thể thêm các phòng khác để gợi ý, nếu muốn)
+            model.addAttribute("allServices", serviceService.findAll());
+            // (Có thể thêm các phòng khác để gợi ý, nếu muốn)
             // model.addAttribute("otherRooms", roomService.findAll().stream().limit(3).toList());
             return "client/room-details"; // <-- (Sẽ tạo ở bước 3)
         } catch (RuntimeException ex) {

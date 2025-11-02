@@ -50,13 +50,16 @@
                                         <td th:text="${b.room?.roomNumber}">101</td>
                                         <td th:text="${b.checkInDate}">2025-10-25</td>
                                         <td th:text="${b.checkOutDate}">2025-10-27</td>
-                                        <td th:text="${b.totalPrice}">$200</td>
+                                        <td th:text="${'$' + #numbers.formatDecimal(b.totalPrice, 1, 2)}">$200.00</td>
                                         <td>
                                             <span th:text="${b.status}"
                                                   th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
                                                                   (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">PENDING</span>
                                         </td>
                                         <td>
+                                            <a th:href="@{/admin/bookings/{id}/services(id=${b.id})}"
+                                               class="btn btn-info btn-sm"
+                                               th:if="${b.status != 'CANCELED'}">Manage Services</a>
                                             <div th:if="${b.status == 'PENDING'}">
                                                 <a th:href="@{/admin/bookings/confirm/{id}(id=${b.id})}" class="btn btn-success btn-sm">Confirm</a>
                                                 <a th:href="@{/admin/bookings/cancel/{id}(id=${b.id})}" class="btn btn-danger btn-sm">Cancel</a>
