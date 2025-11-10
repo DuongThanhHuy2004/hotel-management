@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/rooms", "/room-details/**").permitAll()
                                 .requestMatchers("/booking/**").authenticated()
                                 .requestMatchers("/admin/services/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/payments/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 ).formLogin(
                         form -> form

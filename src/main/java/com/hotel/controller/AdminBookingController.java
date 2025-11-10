@@ -26,7 +26,7 @@ public class AdminBookingController {
     @GetMapping
     public String listBookings(Model model) {
         model.addAttribute("bookings", bookingService.findAll());
-        return "admin/bookings"; // (Sẽ tạo ở bước 9)
+        return "admin/bookings";
     }
 
     // 1. Hiển thị trang quản lý dịch vụ cho 1 đơn
@@ -36,7 +36,7 @@ public class AdminBookingController {
         model.addAttribute("booking", booking);
         // Lấy tất cả dịch vụ để admin chọn
         model.addAttribute("allServices", serviceService.findAll());
-        return "admin/booking-services"; // (Sẽ tạo ở bước 5)
+        return "admin/booking-services";
     }
 
     // 2. Hành động Thêm dịch vụ vào đơn

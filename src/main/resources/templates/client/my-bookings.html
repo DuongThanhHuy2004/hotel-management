@@ -132,6 +132,13 @@
                 PENDING
             </span>
                             </td>
+                            <td>
+                                <a th:if="${b.status == 'PENDING'}"
+                                   th:href="@{/payment/create-payment/{bookingId}(bookingId=${b.id})}"
+                                   class="btn btn-warning btn-sm">
+                                    Pay Now
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

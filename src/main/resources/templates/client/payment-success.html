@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="client/fragments/head :: head"></head>
+<body>
+<header th:replace="client/fragments/header :: header"></header>
+
+<div class="container" style="padding: 100px 0;">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Payment Successful!</h4>
+        <p>Your booking has been confirmed. Thank you for choosing Sona.</p>
+        <hr>
+        <a th:href="@{/my-bookings}" class="btn btn-primary">View My Bookings</a>
+    </div>
+</div>
+<footer th:replace="client/fragments/footer :: footer"></footer>
+<div th:replace="client/fragments/script :: script"></div>
+</body>
+</html>

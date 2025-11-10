@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sona | Payment Failed</title>
+</head>
+<body>
+<header th:replace="client/fragments/header :: header"></header>
+
+<div class="container" style="padding: 100px 0;">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Payment Failed!</h4>
+        <p>Your transaction failed or was canceled. Please try again.</p>
+        <hr>
+        <a th:href="@{/my-bookings}" class="btn btn-danger">Back to My Bookings</a>
+    </div>
+</div>
+
+</body>
+</html>
