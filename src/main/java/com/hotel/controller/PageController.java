@@ -11,17 +11,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.hotel.service.ServiceService;
+import com.hotel.dto.ContactDto;
+import com.hotel.service.ContactService;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.hotel.service.DashboardService;
 
 @Controller
 public class PageController {
     private final RoomService roomService;
     private final BookingService bookingService;
     private final ServiceService serviceService;
+    private final ContactService contactService;
+    private final DashboardService dashboardService;
 
-    public PageController(RoomService roomService, BookingService bookingService, ServiceService serviceService) {
+    public PageController(RoomService roomService, BookingService bookingService, ServiceService serviceService, ContactService contactService, DashboardService dashboardService) {
         this.roomService = roomService;
         this.bookingService = bookingService;
         this.serviceService = serviceService;
+        this.contactService = contactService;
+        this.dashboardService = dashboardService;
     }
 
     @GetMapping("/")
@@ -37,7 +47,9 @@ public class PageController {
     }
 
     @GetMapping("/admin/dashboard")
-    public String adminDashboard() {
+    public String adminDashboard(Model model) {
+        // Gửi 4 con số thống kê ra view
+        model.addAttribute("summary", dashboardService.getDashboardSummary());
         return "admin/index";
     }
 
@@ -74,5 +86,24 @@ public class PageController {
         model.addAttribute("bookings", bookingService.findBookingsByUsername(username));
 
         return "client/my-bookings"; // (Sẽ tạo ở bước 5)
+    }
+    // 1. Hiển thị trang Contact
+    @GetMapping("/contact")
+    public String showContactPage(Model model) {
+        model.addAttribute("contactDto", new ContactDto());
+        return "client/contact"; // (Sẽ tạo ở bước 9)
+    }
+
+    // 2. Nhận dữ liệu từ Form Contact
+    @PostMapping("/contact/send")
+    public String sendContactMessage(@ModelAttribute("contactDto") ContactDto contactDto,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            contactService.saveContact(contactDto);
+            redirectAttributes.addFlashAttribute("successMessage", "Your message has been sent successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error sending message. Please try again.");
+        }
+        return "redirect:/contact";
     }
 }

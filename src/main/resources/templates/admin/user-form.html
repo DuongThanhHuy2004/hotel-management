@@ -51,7 +51,7 @@
                                     <input class="form-check-input" type="checkbox"
                                            th:field="*{roleIds}" th:value="${role.id}"
                                            th:id="${'role-' + role.id}">
-                                    <label class="form-check-label" th:for="${'role-' + role.id}" th:text="${role.name.replace('ROLE_', '')}">ADMIN</label>
+                                    <label class="form-check-label" th:for="${'role-' + role.id}" th:text="${role.name.replace('ROLE_', '')}"></label>
                                 </div>
                             </div>
                         </div>

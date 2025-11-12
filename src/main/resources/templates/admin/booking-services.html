@@ -45,7 +45,7 @@
                             <label for="serviceId">Select Service</label>
                             <select class="form-control" id="serviceId" name="serviceId" required>
                                 <option value="">-- Choose a service --</option>
-                                <option th:each="s : ${allServices}"
+                                <option th:each="s : ${availableServices}"
                                         th:value="${s.id}"
                                         th:text="${s.name + ' ($' + s.price + ')'}">
                                     Laundry ($15.0)

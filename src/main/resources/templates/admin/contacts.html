@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="bg-theme bg-theme2">
+
+<!-- Start wrapper-->
+<div id="wrapper">
+
+    <!--Start sidebar-wrapper-->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+    <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header th:replace="admin/fragments/header :: header"></header>
+    <!--End topbar header-->
+
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row pt-2 pb-2">
+                <div class="col-sm-9"><h4 class="page-title">Contact Messages</h4></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Received At</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="c : ${contacts}" th:style="${c.read} ? '' : 'font-weight: bold;'">
+                                        <td th:text="${c.fullName}">Thanh Huy</td>
+                                        <td th:text="${c.email}">email@example.com</td>
+                                        <td th:text="${c.subject}">Subject...</td>
+                                        <td th:text="${#temporals.format(c.sentAt, 'dd/MM/yyyy HH:mm')}">...</td>
+                                        <td th:text="${c.read} ? 'Read' : 'Unread'">Unread</td>
+                                        <td>
+                                            <a th:href="@{/admin/contacts/view/{id}(id=${c.id})}" class="btn btn-light btn-sm">View</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Start footer-->
+<footer th:replace="admin/fragments/footer :: footer"></footer>
+<!--End footer-->
+
+<!-- Bootstrap core JavaScript-->
+<div th:replace="admin/fragments/script :: script"></div>
+
+<form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
+</body>
+</html>

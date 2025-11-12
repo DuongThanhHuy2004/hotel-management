@@ -23,7 +23,7 @@ public class AdminRoomController {
     @GetMapping
     public String listRooms(Model model) {
         model.addAttribute("rooms", roomService.findAll());
-        return "admin/rooms"; // (Sẽ tạo view ở bước 8)
+        return "admin/rooms";
     }
 
     @GetMapping("/new")

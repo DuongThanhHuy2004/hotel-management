@@ -58,7 +58,7 @@
                                     </ul>
                                 </li>
                                 <li><a href="./blog.html">News</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
+                                <li><a th:href="@{/contact}">Contact</a></li>
                                 <li sec:authorize="isAuthenticated()">
                                     <a th:href="@{/my-bookings}">My Bookings</a>
                                 </li>

@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.hotel.entity.Booking;
 import com.hotel.service.ServiceService;
+import com.hotel.entity.HotelService;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -32,10 +36,26 @@ public class AdminBookingController {
     // 1. Hiển thị trang quản lý dịch vụ cho 1 đơn
     @GetMapping("/{bookingId}/services")
     public String showBookingServicesPage(@PathVariable Long bookingId, Model model) {
+        // 1. Lấy booking (đã chứa các service đã thêm)
         Booking booking = bookingService.findById(bookingId);
         model.addAttribute("booking", booking);
-        // Lấy tất cả dịch vụ để admin chọn
-        model.addAttribute("allServices", serviceService.findAll());
+
+        // 2. Lấy TẤT CẢ dịch vụ
+        List<HotelService> allServices = serviceService.findAll();
+
+        // 3. Lấy ra ID của các dịch vụ ĐÃ CÓ trong booking
+        Set<Long> addedServiceIds = booking.getServices().stream()
+                .map(HotelService::getId)
+                .collect(Collectors.toSet());
+
+        // 4. Lọc và tạo ra một danh sách dịch vụ MỚI (chỉ chứa các dịch vụ CHƯA CÓ)
+        List<HotelService> availableServices = allServices.stream()
+                .filter(service -> !addedServiceIds.contains(service.getId()))
+                .collect(Collectors.toList());
+
+        // 5. Gửi danh sách đã lọc này ra view
+        model.addAttribute("availableServices", availableServices);
+
         return "admin/booking-services";
     }
 
