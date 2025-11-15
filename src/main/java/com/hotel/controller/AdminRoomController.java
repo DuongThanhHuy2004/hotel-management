@@ -6,7 +6,10 @@ import com.hotel.service.RoomService;
 import com.hotel.service.RoomTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 @RequestMapping("/admin/rooms")
@@ -51,8 +54,11 @@ public class AdminRoomController {
     }
 
     @PostMapping("/save")
-    public String saveRoom(@ModelAttribute("roomDto") RoomDto dto) {
-        roomService.save(dto);
+    public String saveRoom(@ModelAttribute("roomDto") RoomDto dto,
+                           @RequestParam("imageFile") MultipartFile imageFile) { // <-- THÊM MỚI
+
+        roomService.save(dto, imageFile); // <-- SỬA LẠI
+
         return "redirect:/admin/rooms";
     }
 

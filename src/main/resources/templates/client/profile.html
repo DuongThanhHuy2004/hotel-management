@@ -18,7 +18,7 @@
     <div class="canvas-close">
         <i class="icon_close"></i>
     </div>
-    <div class="search-icon search-switch">
+    <div class="search-icon  search-switch">
         <i class="icon_search"></i>
     </div>
     <div class="header-configure-area">
@@ -42,7 +42,7 @@
             <li><a href="./pages.html">Pages</a>
                 <ul class="dropdown">
                     <li><a href="./room-details.html">Room Details</a></li>
-                    <li><a href="./blog-details.html">Blog Details</a></li>
+                    <li><a href="#">Deluxe Room</a></li>
                     <li><a href="#">Family Room</a></li>
                     <li><a href="#">Premium Room</a></li>
                 </ul>
@@ -69,85 +69,53 @@
 <header th:replace="client/fragments/header :: header"></header>
 <!-- Header End -->
 
-<!-- Breadcrumb Section Begin -->
 <div class="breadcrumb-section">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>Our Rooms</h2>
+                    <h2>My Profile</h2>
                     <div class="bt-option">
-                        <a href="./home.html">Home</a>
-                        <span>Rooms</span>
+                        <a th:href="@{/}">Home</a>
+                        <span>Profile</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Breadcrumb Section End -->
-
-<!-- Rooms Section Begin -->
-<section class="rooms-section spad">
+<section class="contact-section spad">
     <div class="container">
-        <div class="booking-form" style="margin-bottom: 50px;">
-            <form th:action="@{/rooms}" method="get">
-                <div class="check-date">
-                    <label for="check-in-rooms">Check In:</label>
-                    <input type="text" class="date-input" id="check-in-rooms" name="checkInDate"
-                           th:value="${checkInDate}">
-                    <i class="icon_calendar"></i>
-                </div>
-                <div class="check-date">
-                    <label for="check-out-rooms">Check Out:</label>
-                    <input type="text" class="date-input" id="check-out-rooms" name="checkOutDate"
-                           th:value="${checkOutDate}">
-                    <i class="icon_calendar"></i>
-                </div>
-                <button type="submit">Refine Search</button>
-            </form>
-        </div>
         <div class="row">
-            <div class="col-lg-12" th:if="${rooms.isEmpty()}">
-                <div class="alert alert-warning" role="alert">
-                    <h4>No available rooms found for the selected dates.</h4>
-                    <p>Please try searching for different dates.</p>
+            <div class="col-lg-6 offset-lg-3">
+                <div class="contact-text">
+                    <h2>Change Password</h2>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6" th:each="room : ${rooms}">
-                <div class="room-item">
-                    <img th:src="@{${room.imageUrl}}" alt="Room Image">
-                    <div class="ri-text">
-                        <h4 th:text="${room.roomType?.name}">Deluxe Room</h4>
-                        <h3><span th:text="${room.price}"></span>$/Pernight</h3>
 
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td class="r-o">Size:</td>
-                                <td>30 ft</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Capacity:</td>
-                                <td>Max persion 3</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a th:href="@{/room-details/{id}(id=${room.id})}" class="primary-btn">More Details</a>
+                <form th:action="@{/profile/change-password}" method="post" th:object="${passwordDto}" class="contact-form">
+
+                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="password" th:field="*{oldPassword}" placeholder="Current Password" required>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="password" th:field="*{newPassword}" placeholder="New Password" required>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="password" th:field="*{confirmPassword}" placeholder="Confirm New Password" required>
+                        </div>
+                        <div class="col-lg-12">
+                            <button type="submit">Save Changes</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-12">
-                <div class="room-pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
-<!-- Rooms Section End -->
 
 <!-- Footer Section Begin -->
 <footer th:replace="client/fragments/footer :: footer"></footer>
@@ -167,5 +135,4 @@
 <!-- Js Plugins -->
 <div th:replace="client/fragments/script :: script"></div>
 </body>
-
 </html>

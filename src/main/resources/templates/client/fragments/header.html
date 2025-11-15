@@ -22,8 +22,10 @@
                             <span>EN <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#">Zi</a></li>
-                                    <li><a href="#">Fr</a></li>
+                                    <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">My Profile</a></li> <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Logout</a></li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/my-bookings}">My Bookings</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -46,7 +48,7 @@
                     <div class="nav-menu">
                         <nav class="mainmenu">
                             <ul>
-                                <li class="active"><a href="./index.html">Home</a></li>
+                                <li class="active"><a th:href="@{/}">Home</a></li>
                                 <li><a th:href="@{/rooms}">Rooms</a></li>
                                 <li><a href="./about-us">About Us</a></li>
                                 <li><a href="./pages.html">Pages</a>
@@ -59,9 +61,6 @@
                                 </li>
                                 <li><a href="./blog.html">News</a></li>
                                 <li><a th:href="@{/contact}">Contact</a></li>
-                                <li sec:authorize="isAuthenticated()">
-                                    <a th:href="@{/my-bookings}">My Bookings</a>
-                                </li>
 
                                 <li sec:authorize="!isAuthenticated()">
                                     <a th:href="@{/login}">Login</a>

@@ -13,4 +13,5 @@ public interface UserService {
     User findUserById(Long id);
     void adminSaveUser(UserDto userDto); // Dùng cho cả Create và Update
     void deleteUserById(Long id);
+    void changePassword(String username, String oldPassword, String newPassword);
 }

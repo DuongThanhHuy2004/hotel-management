@@ -83,30 +83,29 @@
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        <h3>Booking Your Room</h3>
+
+                        <form th:action="@{/rooms}" method="get">
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                                <label for="check-in">Check In:</label>
+                                <input type="text" class="date-input" id="check-in" name="checkInDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <label for="check-out">Check Out:</label>
+                                <input type="text" class="date-input" id="check-out" name="checkOutDate">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Guests:</label>
                                 <select id="guest">
                                     <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
                                 </select>
                             </div>
                             <div class="select-option">
                                 <label for="room">Room:</label>
                                 <select id="room">
                                     <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
                                 </select>
                             </div>
                             <button type="submit">Check Availability</button>

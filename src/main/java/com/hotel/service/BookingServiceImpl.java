@@ -15,6 +15,9 @@ import com.hotel.entity.HotelService;
 import com.hotel.repository.ServiceRepository;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.security.access.AccessDeniedException;
+import com.hotel.entity.Payment;
+import com.hotel.repository.PaymentRepository;
 
 @Service
 public
@@ -24,12 +27,14 @@ class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final ServiceRepository serviceRepository;
+    private final PaymentRepository paymentRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, RoomRepository roomRepository, ServiceRepository serviceRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository, RoomRepository roomRepository, ServiceRepository serviceRepository, PaymentRepository paymentRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
         this.serviceRepository = serviceRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     @Override
@@ -158,5 +163,33 @@ class BookingServiceImpl implements BookingService {
 
         // Lưu lại
         bookingRepository.save(booking);
+    }
+
+    @Override
+    public void cancelMyBooking(Long bookingId, String username) {
+        Booking booking = findById(bookingId); // Dùng hàm findById có sẵn
+
+        // 1. Kiểm tra xem đơn này có phải của user này không
+        if (!booking.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("You do not have permission to cancel this booking.");
+        }
+
+        // 2. Kiểm tra xem đơn có đang PENDING không
+        if (!"PENDING".equals(booking.getStatus())) {
+            throw new RuntimeException("This booking cannot be canceled.");
+        }
+
+        // 3. Hủy đơn (dùng lại logic cũ)
+        booking.setStatus("CANCELED");
+        bookingRepository.save(booking);
+
+        // (Ghi lại nhật ký thanh toán thất bại nếu muốn)
+        Payment payment = new Payment();
+        payment.setBooking(booking);
+        payment.setAmount(booking.getTotalPrice());
+        payment.setTransactionCode("CLIENT_CANCELED");
+        payment.setPaymentMethod("N/A");
+        payment.setStatus("CANCELED");
+        paymentRepository.save(payment);
     }
 }

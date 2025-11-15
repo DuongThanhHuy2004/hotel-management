@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.access.AccessDeniedException;
 
 @Controller
 @RequestMapping("/booking")
@@ -45,5 +48,27 @@ public class BookingController {
             // Quay lại trang chi tiết phòng
             return "redirect:/room-details/" + bookingDto.getRoomId();
         }
+    }
+
+    @GetMapping("/cancel/{id}")
+    public String cancelMyBooking(@PathVariable("id") Long bookingId,
+                                  Authentication authentication,
+                                  RedirectAttributes redirectAttributes) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+
+        try {
+            bookingService.cancelMyBooking(bookingId, username);
+            redirectAttributes.addFlashAttribute("successMessage", "Booking #" + bookingId + " has been canceled.");
+        } catch (AccessDeniedException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: You don't have permission to perform this action.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+        }
+
+        return "redirect:/my-bookings";
     }
 }

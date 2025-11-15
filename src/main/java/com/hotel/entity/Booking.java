@@ -51,4 +51,10 @@ public class Booking {
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private Set<HotelService> services = new HashSet<>();
+
+    @Column(name = "has_reviewed")
+    private boolean hasReviewed = false;
+
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL) // Thêm liên kết
+    private Review review;
 }

@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/contacts/**").hasRole("ADMIN")
                                 .requestMatchers("/contact", "/contact/send").permitAll()
                                 .requestMatchers("/api/dashboard/**").hasRole("ADMIN")
+                                .requestMatchers("/write-review/**", "/submit-review").authenticated()
                                 .anyRequest().authenticated()
                 ).formLogin(
                         form -> form

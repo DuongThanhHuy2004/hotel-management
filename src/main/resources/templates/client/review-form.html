@@ -18,7 +18,7 @@
     <div class="canvas-close">
         <i class="icon_close"></i>
     </div>
-    <div class="search-icon search-switch">
+    <div class="search-icon  search-switch">
         <i class="icon_search"></i>
     </div>
     <div class="header-configure-area">
@@ -42,7 +42,7 @@
             <li><a href="./pages.html">Pages</a>
                 <ul class="dropdown">
                     <li><a href="./room-details.html">Room Details</a></li>
-                    <li><a href="./blog-details.html">Blog Details</a></li>
+                    <li><a href="#">Deluxe Room</a></li>
                     <li><a href="#">Family Room</a></li>
                     <li><a href="#">Premium Room</a></li>
                 </ul>
@@ -69,85 +69,61 @@
 <header th:replace="client/fragments/header :: header"></header>
 <!-- Header End -->
 
-<!-- Breadcrumb Section Begin -->
 <div class="breadcrumb-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb-text">
-                    <h2>Our Rooms</h2>
-                    <div class="bt-option">
-                        <a href="./home.html">Home</a>
-                        <span>Rooms</span>
-                    </div>
+        <div class="row"><div class="col-lg-12">
+            <div class="breadcrumb-text">
+                <h2>Write a Review</h2>
+                <div class="bt-option">
+                    <a th:href="@{/my-bookings}">My Bookings</a>
+                    <span>Review</span>
                 </div>
             </div>
-        </div>
+        </div></div>
     </div>
 </div>
-<!-- Breadcrumb Section End -->
-
-<!-- Rooms Section Begin -->
-<section class="rooms-section spad">
+<section class="contact-section spad">
     <div class="container">
-        <div class="booking-form" style="margin-bottom: 50px;">
-            <form th:action="@{/rooms}" method="get">
-                <div class="check-date">
-                    <label for="check-in-rooms">Check In:</label>
-                    <input type="text" class="date-input" id="check-in-rooms" name="checkInDate"
-                           th:value="${checkInDate}">
-                    <i class="icon_calendar"></i>
-                </div>
-                <div class="check-date">
-                    <label for="check-out-rooms">Check Out:</label>
-                    <input type="text" class="date-input" id="check-out-rooms" name="checkOutDate"
-                           th:value="${checkOutDate}">
-                    <i class="icon_calendar"></i>
-                </div>
-                <button type="submit">Refine Search</button>
-            </form>
-        </div>
         <div class="row">
-            <div class="col-lg-12" th:if="${rooms.isEmpty()}">
-                <div class="alert alert-warning" role="alert">
-                    <h4>No available rooms found for the selected dates.</h4>
-                    <p>Please try searching for different dates.</p>
+            <div class="col-lg-8 offset-lg-2">
+                <div class="contact-text">
+                    <h4>Write your review for: <span th:text="${roomName}">Room Name</span></h4>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6" th:each="room : ${rooms}">
-                <div class="room-item">
-                    <img th:src="@{${room.imageUrl}}" alt="Room Image">
-                    <div class="ri-text">
-                        <h4 th:text="${room.roomType?.name}">Deluxe Room</h4>
-                        <h3><span th:text="${room.price}"></span>$/Pernight</h3>
+                <form th:action="@{/submit-review}" method="post" th:object="${reviewDto}" class="contact-form">
 
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td class="r-o">Size:</td>
-                                <td>30 ft</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Capacity:</td>
-                                <td>Max persion 3</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a th:href="@{/room-details/{id}(id=${room.id})}" class="primary-btn">More Details</a>
+                    <input type="hidden" th:field="*{bookingId}">
+                    <input type="hidden" th:field="*{roomId}">
+
+                    <style>
+                        .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+                        .star-rating input { display: none; }
+                        .star-rating label { font-size: 2rem; color: #ddd; cursor: pointer; }
+                        .star-rating input:checked ~ label { color: #f7941d; }
+                        .star-rating label:hover, .star-rating label:hover ~ label { color: #f7941d; }
+                    </style>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Your Rating (1-5 Stars):</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" th:field="*{rating}" value="5"/><label for="star5">★</label>
+                                <input type="radio" id="star4" th:field="*{rating}" value="4"/><label for="star4">★</label>
+                                <input type="radio" id="star3" th:field="*{rating}" value="3"/><label for="star3">★</label>
+                                <input type="radio" id="star2" th:field="*{rating}" value="2"/><label for="star2">★</label>
+                                <input type="radio" id="star1" th:field="*{rating}" value="1" required/><label for="star1">★</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: 20px;">
+                            <label>Your Comment:</label>
+                            <textarea th:field="*{comment}" placeholder="Tell us about your stay..." required></textarea>
+                            <button type="submit">Submit Review</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-12">
-                <div class="room-pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
-<!-- Rooms Section End -->
 
 <!-- Footer Section Begin -->
 <footer th:replace="client/fragments/footer :: footer"></footer>
@@ -167,5 +143,4 @@
 <!-- Js Plugins -->
 <div th:replace="client/fragments/script :: script"></div>
 </body>
-
 </html>
