@@ -8,12 +8,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.hotel.service.CustomOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
+
 
     public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -26,7 +32,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**", "/").permitAll()
                                 .requestMatchers("/sona/**", "/dashtreme/**").permitAll()
@@ -43,16 +49,26 @@ public class SecurityConfig {
                                 .requestMatchers("/contact", "/contact/send").permitAll()
                                 .requestMatchers("/api/dashboard/**").hasRole("ADMIN")
                                 .requestMatchers("/write-review/**", "/submit-review").authenticated()
+                                .requestMatchers("/admin/calendar/**").hasRole("ADMIN")
+                                .requestMatchers("/api/calendar/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/", true)
+                                .defaultSuccessUrl("/", false)
                                 .permitAll()
+                ).oauth2Login(
+                        oauth2 -> oauth2
+                                .loginPage("/login") // Dùng chung trang login
+                                .userInfoEndpoint(userInfo -> userInfo
+                                        .userService(oauth2UserService) // Dùng service ta vừa tạo
+                                )
+                                .defaultSuccessUrl("/", false)
                 ).logout(
                         logout -> logout
                                 .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login?logout")
                                 .permitAll()
                 );
         return http.build();

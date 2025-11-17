@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -33,10 +34,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Long countByStatus(String status);
 
     // 3. Lấy doanh thu theo từng tháng (cho biểu đồ line)
-    @Query("SELECT FUNCTION('MONTH', b.checkInDate) as month, SUM(b.totalPrice) as revenue " +
-            "FROM Booking b WHERE b.status = 'CONFIRMED' AND FUNCTION('YEAR', b.checkInDate) = :year " +
-            "GROUP BY FUNCTION('MONTH', b.checkInDate) " +
-            "ORDER BY month ASC")
+    @Query("SELECT MONTH(b.checkInDate) as month, SUM(b.totalPrice) as revenue " +
+            "FROM Booking b WHERE b.status = 'CONFIRMED' AND YEAR(b.checkInDate) = :year " +
+            "GROUP BY MONTH(b.checkInDate) " +
+            "ORDER BY MONTH(b.checkInDate) ASC") // <-- SỬA LẠI DÒNG NÀY (lặp lại hàm)
     List<Map<String, Object>> getMonthlyRevenue(@Param("year") int year);
 
     // 4. Lấy số lượng đặt của từng loại phòng (cho biểu đồ tròn)
@@ -46,4 +47,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Map<String, Object>> getRoomTypeBookingCounts();
 
     List<Booking> findByUserUsernameOrderByBookingDateDesc(String username);
+    List<Booking> findByStatusIn(Collection<String> statuses);
 }

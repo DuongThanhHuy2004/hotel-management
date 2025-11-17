@@ -24,6 +24,22 @@
     <link rel="stylesheet" th:href="@{/sona/css/style.css}" type="text/css">
 
     <link rel="stylesheet" th:href="@{/sona/css/auth.css}" type="text/css">
+    <style>
+        .google-btn {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .google-btn:hover {
+            background-color: #357ae8;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,6 +79,12 @@
                                 <a href="#" class="forgot-password">Forgot Password?</a>
                             </div>
                             <button type="submit" class="auth-btn">Log In</button>
+                            <div class="text-center" style="margin-top: 15px;">
+                                <p>OR</p>
+                                <a th:href="@{/oauth2/authorization/google}" class="google-btn">
+                                    <i class="fa fa-google"></i> Login with Google
+                                </a>
+                            </div>
                         </form>
                         <p class="auth-switch-text">Don't have an account? <a th:href="@{/register}">Register Now</a></p>
                     </div>

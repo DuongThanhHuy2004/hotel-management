@@ -18,4 +18,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate
     );
+    List<Room> findTop3ByOrderByIdDesc();
 }

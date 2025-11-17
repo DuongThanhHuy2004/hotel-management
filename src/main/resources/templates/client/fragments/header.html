@@ -1,4 +1,9 @@
-<header class="header-section" th:fragment="header" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+<header class="header-section" th:fragment="header">
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -10,25 +15,23 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="tn-right">
-                        <div class="top-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-tripadvisor"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a th:href="@{/rooms}" class="bk-btn">Booking Now</a> <div class="language-option">
+                        <i class="fa fa-user" style="color: #dfa974; margin-right: 5px;"></i> <span>Account <i class="fa fa-angle-down"></i></span>
+                        <div class="flag-dropdown">
+                            <ul>
+                                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Log In</a></li>
+                                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+
+                                <li sec:authorize="isAuthenticated()"><a th:href="@{/my-bookings}">My Bookings</a></li>
+                                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                                <li sec:authorize="isAuthenticated()">
+                                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">
+                                        Log Out
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <a href="#" class="bk-btn">Booking Now</a>
-                        <div class="language-option">
-                            <img th:src="@{/sona/img/flag.jpg}" alt="">
-                            <span>EN <i class="fa fa-angle-down"></i></span>
-                            <div class="flag-dropdown">
-                                <ul>
-                                    <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">My Profile</a></li> <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Logout</a></li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/my-bookings}">My Bookings</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -39,8 +42,7 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="logo">
-                        <a href="./index.html">
-                            <img th:src="@{/sona/img/logo.png}" alt="">
+                        <a th:href="@{/}"> <img th:src="@{/sona/img/logo.png}" alt="">
                         </a>
                     </div>
                 </div>
@@ -50,24 +52,10 @@
                             <ul>
                                 <li class="active"><a th:href="@{/}">Home</a></li>
                                 <li><a th:href="@{/rooms}">Rooms</a></li>
-                                <li><a href="./about-us">About Us</a></li>
-                                <li><a href="./pages.html">Pages</a>
-                                    <ul class="dropdown">
-                                        <li><a href="./room-details.html">Room Details</a></li>
-                                        <li><a href="./blog-details.html">Blog Details</a></li>
-                                        <li><a href="#">Family Room</a></li>
-                                        <li><a href="#">Premium Room</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="./blog.html">News</a></li>
                                 <li><a th:href="@{/contact}">Contact</a></li>
 
                                 <li sec:authorize="!isAuthenticated()">
                                     <a th:href="@{/login}">Login</a>
-                                </li>
-
-                                <li sec:authorize="isAuthenticated()">
-                                    <a th:href="@{/logout}">Logout</a>
                                 </li>
                             </ul>
                         </nav>
@@ -80,3 +68,5 @@
         </div>
     </div>
 </header>
+</body>
+</html>

@@ -14,4 +14,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // Tính điểm trung bình của 1 phòng
     @Query("SELECT COALESCE(AVG(r.rating), 0.0) FROM Review r WHERE r.room.id = :roomId")
     Double getAverageRatingByRoomId(@Param("roomId") Long roomId);
+    List<Review> findTop3ByOrderByCreatedAtDesc();
 }

@@ -4,6 +4,7 @@ import com.hotel.dto.BookingDto;
 import com.hotel.entity.Booking;
 import java.util.List;
 import java.time.LocalDate;
+import com.hotel.dto.BookingCalendarDto;
 
 public interface BookingService {
     // Client
@@ -21,4 +22,5 @@ public interface BookingService {
     void cancelMyBooking(Long bookingId, String username);
 
     List<Booking> findBookingsByUsername(String username);
+    List<BookingCalendarDto> getCalendarBookings();
 }

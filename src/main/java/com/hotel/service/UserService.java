@@ -14,4 +14,5 @@ public interface UserService {
     void adminSaveUser(UserDto userDto); // Dùng cho cả Create và Update
     void deleteUserById(Long id);
     void changePassword(String username, String oldPassword, String newPassword);
+    void processOAuthPostLogin(String email, String fullName, User.Provider provider, String providerId);
 }

@@ -17,6 +17,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import com.hotel.dto.PasswordChangeDto;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 @Controller
 public class PageController {
@@ -38,8 +40,22 @@ public class PageController {
         this.reviewService = reviewService;
     }
 
+    private String getLoggedInUsername(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else if (principal instanceof DefaultOAuth2User) {
+            return ((DefaultOAuth2User) principal).getAttribute("email");
+        } else {
+            return principal.toString(); // Fallback
+        }
+    }
+
     @GetMapping("/")
-    public String home(Authentication authentication) {
+    public String home(Authentication authentication, Model model) {
         if (authentication != null && authentication.isAuthenticated()) {
             for (GrantedAuthority auth : authentication.getAuthorities()) {
                 if ("ROLE_ADMIN".equals(auth.getAuthority())) {
@@ -47,6 +63,11 @@ public class PageController {
                 }
             }
         }
+        // 1. Lấy 3 phòng mới nhất
+        model.addAttribute("featuredRooms", roomService.findTop3ByOrderByIdDesc());
+
+        // 2. Lấy 3 review mới nhất
+        model.addAttribute("latestReviews", reviewService.findTop3ByOrderByCreatedAtDesc());
         return "client/index"; // Trang chủ cho client (user và khách)
     }
 
@@ -100,18 +121,13 @@ public class PageController {
     }
     @GetMapping("/my-bookings")
     public String myBookings(Model model, Authentication authentication) {
-        // 1. Kiểm tra xem đã đăng nhập chưa
-        if (authentication == null || !authentication.isAuthenticated()) {
+        String username = getLoggedInUsername(authentication);
+        if (username == null) {
             return "redirect:/login";
         }
 
-        // 2. Lấy username
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-
-        // 3. Lấy danh sách booking và đưa ra view
         model.addAttribute("bookings", bookingService.findBookingsByUsername(username));
-
-        return "client/my-bookings"; // (Sẽ tạo ở bước 5)
+        return "client/my-bookings";
     }
     // 1. Hiển thị trang Contact
     @GetMapping("/contact")
@@ -146,7 +162,8 @@ public class PageController {
                                  Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        String username = getLoggedInUsername(authentication);
+        if (username == null) {
             return "redirect:/login";
         }
 
@@ -157,7 +174,6 @@ public class PageController {
         }
 
         try {
-            String username = ((UserDetails) authentication.getPrincipal()).getUsername();
             userService.changePassword(username, passwordDto.getOldPassword(), passwordDto.getNewPassword());
             redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully!");
         } catch (RuntimeException e) {

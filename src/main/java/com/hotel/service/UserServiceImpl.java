@@ -8,7 +8,11 @@ import com.hotel.repository.RoleRepository;
 import com.hotel.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.hotel.entity.User;
+import com.hotel.entity.Role;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -138,5 +142,42 @@ public class UserServiceImpl implements UserService {
         // 3. Mã hóa và lưu mật khẩu mới
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public void processOAuthPostLogin(String email, String fullName, User.Provider provider, String providerId) {
+
+        Optional<User> existUser = userRepository.findByUsername(email);
+
+        if (existUser.isEmpty()) {
+            // Trường hợp 1: User mới -> Tạo user mới
+            User newUser = new User();
+            newUser.setUsername(email);
+            newUser.setEmail(email);
+            newUser.setFullName(fullName);
+            newUser.setProvider(provider);
+            newUser.setProviderId(providerId);
+            newUser.setPassword(null); // Không có mật khẩu
+
+            // Gán quyền mặc định là ROLE_USER
+            Role userRole = roleRepository.findByName("ROLE_USER")
+                    .orElseThrow(() -> new RuntimeException("Error: Role 'ROLE_USER' is not found."));
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
+            newUser.setRoles(roles);
+
+            userRepository.save(newUser);
+        } else {
+            // Trường hợp 2: User đã tồn tại (bằng email)
+            User user = existUser.get();
+            // Chỉ cập nhật provider nếu họ đăng nhập bằng LOCAL trước đó
+            if (user.getProvider() == User.Provider.LOCAL) {
+                user.setProvider(provider);
+                user.setProviderId(providerId);
+                user.setFullName(fullName); // Cập nhật tên (có thể đổi)
+                userRepository.save(user);
+            }
+            // (Nếu user đã đăng nhập bằng Google/Facebook trước đó rồi thì thôi)
+        }
     }
 }

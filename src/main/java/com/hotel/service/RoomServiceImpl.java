@@ -82,4 +82,9 @@ public class RoomServiceImpl implements RoomService {
         }
         return roomRepository.findAvailableRooms(checkIn, checkOut);
     }
+
+    @Override
+    public List<Room> findTop3ByOrderByIdDesc() {
+        return roomRepository.findTop3ByOrderByIdDesc();
+    }
 }

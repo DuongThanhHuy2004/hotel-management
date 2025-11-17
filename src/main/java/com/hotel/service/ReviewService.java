@@ -10,4 +10,5 @@ public interface ReviewService {
     double getAverageRatingForRoom(Long roomId);
     List<Review> findAll();
     void deleteReview(Long id);
+    List<Review> findTop3ByOrderByCreatedAtDesc();
 }

@@ -13,4 +13,5 @@ public interface RoomService {
     void deleteById(Long id);
 
     List<Room> findAvailableRooms(LocalDate checkIn, LocalDate checkOut);
+    List<Room> findTop3ByOrderByIdDesc();
 }

@@ -18,6 +18,8 @@ import java.util.Set;
 import org.springframework.security.access.AccessDeniedException;
 import com.hotel.entity.Payment;
 import com.hotel.repository.PaymentRepository;
+import com.hotel.dto.BookingCalendarDto;
+import java.util.stream.Collectors;
 
 @Service
 public
@@ -191,5 +193,41 @@ class BookingServiceImpl implements BookingService {
         payment.setPaymentMethod("N/A");
         payment.setStatus("CANCELED");
         paymentRepository.save(payment);
+    }
+
+    @Override
+    public List<BookingCalendarDto> getCalendarBookings() {
+        // 1. Lấy tất cả các đơn đang PENDING hoặc CONFIRMED
+        List<Booking> bookings = bookingRepository.findByStatusIn(List.of("PENDING", "CONFIRMED"));
+
+        // 2. Chuyển đổi (map) chúng sang DTO mà Calendar hiểu
+        return bookings.stream()
+                .map(this::mapToCalendarDto)
+                .collect(Collectors.toList());
+    }
+
+    // Hàm private hỗ trợ chuyển đổi
+    private BookingCalendarDto mapToCalendarDto(Booking booking) {
+        BookingCalendarDto dto = new BookingCalendarDto();
+
+        // Tiêu đề: "Room 101 - client"
+        dto.setTitle("Room " + booking.getRoom().getRoomNumber() + " - " + booking.getUser().getUsername());
+
+        // Ngày bắt đầu
+        dto.setStart(booking.getCheckInDate().toString()); // (yyyy-MM-dd)
+
+        // Ngày kết thúc (FullCalendar coi ngày kết thúc là độc quyền (exclusive))
+        // Vì vậy, check-out ngày 12 thì event sẽ kết thúc vào đầu ngày 12 (hiển thị đến hết ngày 11).
+        // Đây chính là logic đúng của chúng ta.
+        dto.setEnd(booking.getCheckOutDate().toString());
+
+        // Đặt màu dựa trên trạng thái
+        if ("CONFIRMED".equals(booking.getStatus())) {
+            dto.setColor("#28a745"); // Màu xanh lá
+        } else {
+            dto.setColor("#ffc107"); // Màu vàng (Pending)
+        }
+
+        return dto;
     }
 }

@@ -78,4 +78,9 @@ public class ReviewServiceImpl implements ReviewService {
         bookingRepository.save(booking);
         reviewRepository.deleteById(id);
     }
+
+    @Override
+    public List<Review> findTop3ByOrderByCreatedAtDesc() {
+        return reviewRepository.findTop3ByOrderByCreatedAtDesc();
+    }
 }

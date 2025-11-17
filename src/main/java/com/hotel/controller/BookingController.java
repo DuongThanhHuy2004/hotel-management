@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 @Controller
 @RequestMapping("/booking")
@@ -23,29 +24,37 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    private String getLoggedInUsername(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else if (principal instanceof DefaultOAuth2User) {
+            return ((DefaultOAuth2User) principal).getAttribute("email");
+        } else {
+            return null; // Không xác định
+        }
+    }
+
     @PostMapping("/create")
     public String createBooking(@ModelAttribute BookingDto bookingDto,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
-        // 1. Yêu cầu phải đăng nhập
-        if (authentication == null || !authentication.isAuthenticated()) {
+        String username = getLoggedInUsername(authentication);
+        if (username == null) {
             return "redirect:/login";
         }
 
-        // 2. Lấy username của người đang đăng nhập
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-
         try {
-            // 3. Gọi service để tạo booking
             bookingService.createBooking(bookingDto, username);
             redirectAttributes.addFlashAttribute("successMessage", "Your room has been booked successfully! Please wait for admin confirmation.");
-            return "redirect:/rooms"; // (Hoặc trang "My Bookings" nếu có)
+            return "redirect:/my-bookings"; // Sửa: Về trang My Bookings
 
         } catch (RuntimeException e) {
-            // 4. Nếu có lỗi (hết phòng, ngày sai...)
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            // Quay lại trang chi tiết phòng
             return "redirect:/room-details/" + bookingDto.getRoomId();
         }
     }
@@ -55,10 +64,10 @@ public class BookingController {
                                   Authentication authentication,
                                   RedirectAttributes redirectAttributes) {
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        String username = getLoggedInUsername(authentication);
+        if (username == null) {
             return "redirect:/login";
         }
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 
         try {
             bookingService.cancelMyBooking(bookingId, username);
