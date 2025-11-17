@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{admin/fragments/head :: head}"></div>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <style>
+        /* Sửa lại màu chữ của Lịch cho hợp với theme tối */
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+            color: #d1d1d1; /* Màu chữ */
+        }
+        .fc-col-header-cell-cushion, .fc-daygrid-day-number {
+            color: #fff !important; /* Chữ ngày, thứ */
+            text-decoration: none;
+        }
+        .fc-event {
+            border: none !important;
+        }
+        .fc-event-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="bg-theme bg-theme2">
+<div id="wrapper">
+
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+    <header th:replace="~{admin/fragments/header :: header}"></header>
+    <div class="clearfix"></div>
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row pt-2 pb-2">
+                <div class="col-sm-9">
+                    <h4 class="page-title">Booking Calendar</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+    </div><a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+</div><div th:replace="~{admin/fragments/script :: script}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Giao diện tháng
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            editable: false, // Không cho kéo thả (an toàn)
+
+            // Lấy dữ liệu từ API chúng ta vừa tạo
+            events: '/api/calendar/bookings'
+        });
+        calendar.render();
+    });
+</script>
+
+<form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
+
+</body>
+</html>
