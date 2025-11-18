@@ -2149,7 +2149,7 @@ table.grid td {
 	line-height: 1.25;
 	color: rgba(255,255,255,.85);
     background-color: rgba(255,255,255,.08);
-    border: 0px solid #dee2e6;
+    border: 0px solid rgba(255, 255, 255, 0.18);
 	box-shadow: 0 0.125rem 0.25rem rgba(80, 73, 73, 0.06);
 }
 .page-link:hover {
@@ -2157,7 +2157,7 @@ table.grid td {
 	color: rgba(255,255,255,.85);
 	text-decoration: none;
 	background-color: rgba(255,255,255,.2);
-	border-color: #dee2e6
+	border-color: rgba(255, 255, 255, 0.09)
 }
 .page-link:focus {
 	z-index: 2;
@@ -2170,16 +2170,16 @@ table.grid td {
 
 .page-item.active .page-link {
 	z-index: 1;
-	color: #000;
-    background-color: #fff;
-	border-color: #14abef
+	color: #fff;
+    background-color: #6c757d;
+	border-color: rgba(255, 255, 255, 0.06)
 }
 .page-item.disabled .page-link {
 	color: #6c757d;
 	pointer-events: none;
 	cursor: auto;
-	background-color: #fff;
-	border-color: #dee2e6
+	background-color: rgba(255, 255, 255, 0.66);
+	border-color: rgba(255, 255, 255, 0.58)
 }
 .pagination-lg .page-link {
 	padding: .75rem 1.5rem;
@@ -2998,7 +2998,7 @@ table.grid td {
 [class*="icheck-material"] {
   min-height: 22px;
   margin-top: 6px;
-  margin-bottom: 6px 
+  margin-bottom: 6px;
   padding-left: 0px; }
   [class*="icheck-material"] > label {
     padding-left: 29px !important;

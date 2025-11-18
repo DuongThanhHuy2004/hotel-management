@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.hotel.entity.Contact;
 
 @Controller
 @RequestMapping("/admin/contacts")
@@ -21,9 +26,13 @@ public class AdminContactController {
 
     // 1. Hiển thị danh sách
     @GetMapping
-    public String listContacts(Model model) {
-        model.addAttribute("contacts", contactService.findAll());
-        return "admin/contacts"; // (Sẽ tạo ở bước 9)
+    public String listContacts(Model model,
+                               @RequestParam(name = "page", defaultValue = "0") int page,
+                               @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Contact> contactPage = contactService.findAll(pageable);
+        model.addAttribute("contactPage", contactPage); // Đổi tên biến
+        return "admin/contacts";
     }
 
     // 2. (Optional) Xem chi tiết và đánh dấu đã đọc

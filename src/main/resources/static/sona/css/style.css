@@ -2335,3 +2335,17 @@ ul, ol {
 		margin-bottom: 10px;
 	}
 }
+.pagination .page-item.active .page-link {
+    background-color: #dfa975;
+    border-color: #dfa975;
+    color: #fff;
+}
+
+.pagination .page-link:hover {
+    background-color: #dfa975;
+    border-color: #dfa975;
+    color: #fff;
+}
+.pagination .page-link {
+    color: #707079;
+}

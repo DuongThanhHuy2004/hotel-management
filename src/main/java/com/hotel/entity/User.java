@@ -1,5 +1,6 @@
 package com.hotel.entity;
 
+import com.hotel.enums.Provider;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,8 +40,5 @@ public class User {
 
     private String providerId; // ID của user đó trên Google
 
-    // Thêm Enum Provider
-    public enum Provider {
-        LOCAL, GOOGLE, FACEBOOK
-    }
+
 }

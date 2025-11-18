@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -46,6 +48,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "GROUP BY b.room.roomType.name")
     List<Map<String, Object>> getRoomTypeBookingCounts();
 
-    List<Booking> findByUserUsernameOrderByBookingDateDesc(String username);
+    Page<Booking> findByUserUsernameOrderByBookingDateDesc(String username, Pageable pageable);
+    Page<Booking> findAllByOrderByIdDesc(Pageable pageable);
     List<Booking> findByStatusIn(Collection<String> statuses);
 }

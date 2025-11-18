@@ -39,7 +39,7 @@ public class ReviewController {
 
         model.addAttribute("reviewDto", reviewDto);
         model.addAttribute("roomName", booking.getRoom().getRoomType().getName()); // Hiển thị tên phòng
-        return "client/review-form"; // (Sẽ tạo ở bước 9)
+        return "client/review-form";
     }
 
     // 2. Nhận dữ liệu từ Form

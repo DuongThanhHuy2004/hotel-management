@@ -6,6 +6,11 @@ import com.hotel.service.ServiceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.hotel.entity.HotelService;
 
 @Controller
 @RequestMapping("/admin/services")
@@ -19,9 +24,14 @@ public class AdminServiceController {
 
     // R (Read) - List all
     @GetMapping
-    public String listServices(Model model) {
-        model.addAttribute("services", serviceService.findAll());
-        return "admin/services"; // (Sẽ tạo ở bước 8)
+    public String listServices(Model model,
+                               @RequestParam(name = "page", defaultValue = "0") int page,
+                               @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        // Gọi hàm mới có Pageable
+        Page<HotelService> servicePage = serviceService.findAll(pageable);
+        model.addAttribute("servicePage", servicePage); // Đổi tên biến
+        return "admin/services";
     }
 
     // C (Create) - Show form

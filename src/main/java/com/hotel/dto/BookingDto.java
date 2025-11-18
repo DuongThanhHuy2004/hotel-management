@@ -15,7 +15,6 @@ public class BookingDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate checkOutDate;
 
-    // Chúng ta sẽ lấy userId từ người dùng đang đăng nhập
 
     private List<Long> serviceIds;
 }

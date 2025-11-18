@@ -6,6 +6,9 @@ import com.hotel.service.RoomTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/admin/room-types")
@@ -18,9 +21,13 @@ public class AdminRoomTypeController {
     }
 
     @GetMapping
-    public String listRoomTypes(Model model) {
-        model.addAttribute("roomTypes", roomTypeService.findAll());
-        return "admin/room-types"; // (Sẽ tạo view ở bước 8)
+    public String listRoomTypes(Model model,
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RoomType> roomTypePage = roomTypeService.findAll(pageable);
+        model.addAttribute("roomTypePage", roomTypePage); // Đổi tên biến
+        return "admin/room-types";
     }
 
     @GetMapping("/new")

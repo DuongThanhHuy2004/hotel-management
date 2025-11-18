@@ -1,21 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/fragments/head :: head"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head th:replace="~{admin/fragments/head :: head}"></head>
 
 <body class="bg-theme bg-theme2">
 
-<!-- Start wrapper-->
 <div id="wrapper">
 
-    <!--Start sidebar-wrapper-->
-    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
-    <!--End sidebar-wrapper-->
-
-    <!--Start topbar header-->
-    <header th:replace="admin/fragments/header :: header"></header>
-    <!--End topbar header-->
-
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+    <header th:replace="~{admin/fragments/header :: header}"></header>
     <div class="clearfix"></div>
+
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
@@ -23,7 +17,7 @@
             </div>
 
             <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}">D</div>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -44,7 +38,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="b : ${bookings}">
+
+                                    <tr th:each="b : ${bookingPage.content}">
                                         <td th:text="${b.id}">1</td>
                                         <td th:text="${b.user?.username}">client_user</td>
                                         <td th:text="${b.room?.roomNumber}">101</td>
@@ -57,32 +52,49 @@
                                                                   (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">PENDING</span>
                                         </td>
                                         <td>
-                                            <a th:href="@{/admin/bookings/{id}/services(id=${b.id})}"
-                                               class="btn btn-info btn-sm"
-                                               th:if="${b.status != 'CANCELED'}">Manage Services</a>
+                                            <a th:href="@{/admin/bookings/{id}/services(id=${b.id})}" class="btn btn-info btn-sm"
+                                               th:if="${b.status != 'CANCELED'}" style="margin-bottom: 5px;">Manage Services</a>
                                             <div th:if="${b.status == 'PENDING'}">
                                                 <a th:href="@{/admin/bookings/confirm/{id}(id=${b.id})}" class="btn btn-success btn-sm">Confirm</a>
                                                 <a th:href="@{/admin/bookings/cancel/{id}(id=${b.id})}" class="btn btn-danger btn-sm">Cancel</a>
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr th:if="${bookingPage.empty}">
+                                        <td colspan="8" class="text-center">No bookings found.</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <nav th:if="${bookingPage.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item" th:classappend="${bookingPage.first} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/bookings(page=${bookingPage.number - 1}, size=${bookingPage.size})}"><i class="fa fa-angle-left"></i></a>
+                            </li>
+
+                            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, bookingPage.totalPages - 1)}"
+                                th:classappend="${pageNumber == bookingPage.number} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/bookings(page=${pageNumber}, size=${bookingPage.size})}"
+                                   th:text="${pageNumber + 1}"></a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${bookingPage.last} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/bookings(page=${bookingPage.number + 1}, size=${bookingPage.size})}"><i class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
+
             </div>
         </div>
-    </div><!--End wrapper-->
-</div>
-<!--Start footer-->
-<footer th:replace="admin/fragments/footer :: footer"></footer>
-<!--End footer-->
+    </div><a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+    <div th:replace="~{admin/fragments/script :: script}"></div>
 
-<!-- Bootstrap core JavaScript-->
-<div th:replace="admin/fragments/script :: script"></div>
+    <form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
 
-<form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
-</body>
+</div></body>
 </html>

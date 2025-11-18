@@ -2,9 +2,10 @@ package com.hotel.service;
 
 import com.hotel.config.VnpayConfig;
 import com.hotel.entity.Booking;
-import com.hotel.entity.Payment; // Thêm import
+import com.hotel.entity.Payment;
 import com.hotel.repository.BookingRepository;
-import com.hotel.repository.PaymentRepository; // Thêm import
+import com.hotel.repository.PaymentRepository;
+import com.hotel.utils.HashUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,35 +20,18 @@ public class PaymentServiceImpl implements PaymentService {
     private final VnpayConfig vnpayConfig;
     private final BookingRepository bookingRepository;
     private final BookingService bookingService;
-    private final PaymentRepository paymentRepository; // Thêm repository
+    private final PaymentRepository paymentRepository;
 
-    // Sửa lại constructor
     public PaymentServiceImpl(VnpayConfig vnpayConfig, BookingRepository bookingRepository,
                               BookingService bookingService, PaymentRepository paymentRepository) {
         this.vnpayConfig = vnpayConfig;
         this.bookingRepository = bookingRepository;
         this.bookingService = bookingService;
-        this.paymentRepository = paymentRepository; // Thêm vào
+        this.paymentRepository = paymentRepository;
     }
 
-    // (Hàm hmacSHA512 giữ nguyên)
-    private String hmacSHA512(String key, String data) {
-        try {
-            javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA512");
-            javax.crypto.spec.SecretKeySpec secretKeySpec = new javax.crypto.spec.SecretKeySpec(key.getBytes(), "HmacSHA512");
-            mac.init(secretKeySpec);
-            byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder(2 * hash.length);
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate HMACSHA512 signature", e);
-        }
-    }
+    // (Hàm private hmacSHA512 ĐÃ BỊ XÓA, vì đã chuyển sang HashUtils)
 
-    // (Hàm getIpAddress giữ nguyên)
     private String getIpAddress(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {
@@ -69,8 +53,7 @@ public class PaymentServiceImpl implements PaymentService {
         long amount = (long) (booking.getTotalPrice() * 100);
         String vnp_TxnRef = bookingId.toString() + "_" + System.currentTimeMillis();
 
-        // Dùng IP test cứng cho an toàn
-        String vnp_IpAddr = "13.114.220.106";
+        String vnp_IpAddr = "13.114.220.106"; // Dùng IP test cứng
         String vnp_OrderInfo = "Payment for booking #" + bookingId;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -117,14 +100,17 @@ public class PaymentServiceImpl implements PaymentService {
         query.deleteCharAt(query.length() - 1);
         hashData.deleteCharAt(hashData.length() - 1);
 
-        String vnp_SecureHash = hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
+        // ===================================
+        // SỬA LỖI Ở ĐÂY (Gọi HashUtils)
+        // ===================================
+        String vnp_SecureHash = HashUtils.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
+
         query.append("&vnp_SecureHash=");
         query.append(vnp_SecureHash);
 
         return vnpayConfig.getVnp_Url() + "?" + query;
     }
 
-    // SỬA LẠI HÀM NÀY ĐỂ GHI LOG PAYMENT
     @Override
     public int handlePaymentCallback(HttpServletRequest request) {
         Map<String, String> fields = new HashMap<>();
@@ -151,7 +137,10 @@ public class PaymentServiceImpl implements PaymentService {
         }
         hashData.deleteCharAt(hashData.length() - 1);
 
-        String calculatedHash = hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
+        // ===================================
+        // SỬA LỖI Ở ĐÂY (Gọi HashUtils)
+        // ===================================
+        String calculatedHash = HashUtils.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
 
         if (calculatedHash.equals(vnp_SecureHash)) {
             String vnp_ResponseCode = fields.get("vnp_ResponseCode");
@@ -159,12 +148,9 @@ public class PaymentServiceImpl implements PaymentService {
             Long bookingId = Long.parseLong(vnp_TxnRef.split("_")[0]);
             double amount = Double.parseDouble(fields.get("vnp_Amount")) / 100;
 
-            // Lấy booking
             Booking booking = bookingService.findById(bookingId);
 
-            // ===========================================
-            // (PHẦN MỚI) TẠO BẢN GHI THANH TOÁN (PAYMENT)
-            // ===========================================
+            // Ghi nhật ký Payment
             Payment payment = new Payment();
             payment.setBooking(booking);
             payment.setAmount(amount);

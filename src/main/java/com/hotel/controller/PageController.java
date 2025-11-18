@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.hotel.dto.ContactDto;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +18,13 @@ import java.time.LocalDate;
 import com.hotel.dto.PasswordChangeDto;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import com.hotel.entity.Booking;
+import com.hotel.entity.Room;
+import com.hotel.entity.Review;
+
 
 @Controller
 public class PageController {
@@ -50,7 +56,7 @@ public class PageController {
         } else if (principal instanceof DefaultOAuth2User) {
             return ((DefaultOAuth2User) principal).getAttribute("email");
         } else {
-            return principal.toString(); // Fallback
+            return principal.toString();
         }
     }
 
@@ -80,25 +86,28 @@ public class PageController {
 
     @GetMapping("/rooms")
     public String clientRoomsPage(
-            // Thêm 2 tham số này, không bắt buộc
             @RequestParam(name = "checkInDate", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
 
             @RequestParam(name = "checkOutDate", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
 
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "6") int size,
             Model model) {
 
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Room> roomPage;
+
         if (checkInDate != null && checkOutDate != null) {
-            // Nếu có ngày tìm kiếm -> Lọc
-            model.addAttribute("rooms", roomService.findAvailableRooms(checkInDate, checkOutDate));
+            roomPage = roomService.findAvailableRooms(checkInDate, checkOutDate, pageable);
         } else {
-            // Nếu không có ngày (vào thẳng /rooms) -> Hiển thị tất cả
-            model.addAttribute("rooms", roomService.findAll());
+            roomPage = roomService.findAll(pageable);
         }
 
-        // Gửi lại 2 biến ngày ra view để hiển thị lại trên form
-        model.addAttribute("checkInDate", checkInDate);
+        model.addAttribute("roomPage", roomPage); // Gửi Page object
+        model.addAttribute("checkInDate", checkInDate); // Gửi lại để form nhớ
         model.addAttribute("checkOutDate", checkOutDate);
 
         return "client/rooms";
@@ -111,32 +120,37 @@ public class PageController {
             model.addAttribute("allServices", serviceService.findAll());
             model.addAttribute("reviews", reviewService.getReviewsForRoom(id));
             model.addAttribute("averageRating", reviewService.getAverageRatingForRoom(id));
-            // (Có thể thêm các phòng khác để gợi ý, nếu muốn)
-            // model.addAttribute("otherRooms", roomService.findAll().stream().limit(3).toList());
-            return "client/room-details"; // <-- (Sẽ tạo ở bước 3)
+
+            return "client/room-details";
         } catch (RuntimeException ex) {
-            // (Nếu không tìm thấy phòng)
             return "redirect:/rooms?error=notFound";
         }
     }
     @GetMapping("/my-bookings")
-    public String myBookings(Model model, Authentication authentication) {
+    public String myBookings(Model model, Authentication authentication,
+                             @RequestParam(name = "page", defaultValue = "0") int page,
+                             @RequestParam(name = "size", defaultValue = "5") int size) {
+
         String username = getLoggedInUsername(authentication);
         if (username == null) {
             return "redirect:/login";
         }
 
-        model.addAttribute("bookings", bookingService.findBookingsByUsername(username));
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Booking> bookingPage = bookingService.findBookingsByUsername(username, pageable);
+
+        model.addAttribute("bookingPage", bookingPage);
+
         return "client/my-bookings";
     }
-    // 1. Hiển thị trang Contact
+
     @GetMapping("/contact")
     public String showContactPage(Model model) {
         model.addAttribute("contactDto", new ContactDto());
-        return "client/contact"; // (Sẽ tạo ở bước 9)
+        return "client/contact";
     }
 
-    // 2. Nhận dữ liệu từ Form Contact
+
     @PostMapping("/contact/send")
     public String sendContactMessage(@ModelAttribute("contactDto") ContactDto contactDto,
                                      RedirectAttributes redirectAttributes) {
@@ -149,14 +163,14 @@ public class PageController {
         return "redirect:/contact";
     }
 
-    // 1. Hiển thị trang Profile
+
     @GetMapping("/profile")
     public String showProfilePage(Model model) {
         model.addAttribute("passwordDto", new PasswordChangeDto());
-        return "client/profile"; // (Sẽ tạo ở bước 5)
+        return "client/profile";
     }
 
-    // 2. Xử lý đổi mật khẩu
+
     @PostMapping("/profile/change-password")
     public String changePassword(@ModelAttribute("passwordDto") PasswordChangeDto passwordDto,
                                  Authentication authentication,
@@ -167,7 +181,6 @@ public class PageController {
             return "redirect:/login";
         }
 
-        // 2.1. Kiểm tra 2 mật khẩu mới có khớp không
         if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("errorMessage", "New passwords do not match.");
             return "redirect:/profile";

@@ -101,9 +101,6 @@
                     </div>
 
                     <div class="review-item" th:each="review : ${reviews}">
-                        <div class="ri-pic">
-                            <img th:src="@{/sona/img/room/avatar.png}" alt="">
-                        </div>
                         <div class="ri-text"> <span><span th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}"></span></span>
                             <div class="rating">
                                 <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fa fa-star"></i>

@@ -9,6 +9,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -65,8 +67,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> findAll() {
-        return reviewRepository.findAll();
+    public Page<Review> findAll(Pageable pageable) {
+        return reviewRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     @Override

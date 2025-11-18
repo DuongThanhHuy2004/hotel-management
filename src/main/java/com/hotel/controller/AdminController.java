@@ -8,7 +8,10 @@ import com.hotel.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import com.hotel.entity.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +29,14 @@ public class AdminController {
 
     // R (Read) - List all users
     @GetMapping
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.findAllUsers());
-        return "admin/users"; // (Sẽ tạo ở bước 6)
+    public String listUsers(Model model,
+                            @RequestParam(name = "page", defaultValue = "0") int page,
+                            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userService.findAllUsers(pageable);
+        model.addAttribute("userPage", userPage); // Đổi tên biến
+        return "admin/users";
     }
-
     // C (Create) - Show form
     @GetMapping("/new")
     public String showCreateForm(Model model) {

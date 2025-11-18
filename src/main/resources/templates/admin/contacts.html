@@ -1,20 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/fragments/head :: head"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/head :: head}"></head>
 
 <body class="bg-theme bg-theme2">
-
-<!-- Start wrapper-->
-<div id="wrapper">
-
-    <!--Start sidebar-wrapper-->
-    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
-    <!--End sidebar-wrapper-->
-
-    <!--Start topbar header-->
-    <header th:replace="admin/fragments/header :: header"></header>
-    <!--End topbar header-->
-
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+    <header th:replace="~{admin/fragments/header :: header}"></header>
     <div class="clearfix"></div>
     <div class="content-wrapper">
         <div class="container-fluid">
@@ -38,33 +29,46 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="c : ${contacts}" th:style="${c.read} ? '' : 'font-weight: bold;'">
-                                        <td th:text="${c.fullName}">Thanh Huy</td>
-                                        <td th:text="${c.email}">email@example.com</td>
-                                        <td th:text="${c.subject}">Subject...</td>
+                                    <tr th:each="c : ${contactPage.content}" th:style="${c.read} ? '' : 'font-weight: bold;'">
+                                        <td th:text="${c.fullName}">...</td>
+                                        <td th:text="${c.email}">...</td>
+                                        <td th:text="${c.subject}">...</td>
                                         <td th:text="${#temporals.format(c.sentAt, 'dd/MM/yyyy HH:mm')}">...</td>
-                                        <td th:text="${c.read} ? 'Read' : 'Unread'">Unread</td>
+                                        <td th:text="${c.read} ? 'Read' : 'Unread'">...</td>
                                         <td>
                                             <a th:href="@{/admin/contacts/view/{id}(id=${c.id})}" class="btn btn-light btn-sm">View</a>
                                         </td>
+                                    </tr>
+                                    <tr th:if="${contactPage.empty}">
+                                        <td colspan="6" class="text-center">No messages found.</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <nav th:if="${contactPage.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${contactPage.first} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/contacts(page=${contactPage.number - 1}, size=${contactPage.size})}"><i class="fa fa-angle-left"></i></a>
+                            </li>
+                            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, contactPage.totalPages - 1)}"
+                                th:classappend="${pageNumber == contactPage.number} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/contacts(page=${pageNumber}, size=${contactPage.size})}"
+                                   th:text="${pageNumber + 1}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${contactPage.last} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/contacts(page=${contactPage.number + 1}, size=${contactPage.size})}"><i class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--Start footer-->
-<footer th:replace="admin/fragments/footer :: footer"></footer>
-<!--End footer-->
-
-<!-- Bootstrap core JavaScript-->
-<div th:replace="admin/fragments/script :: script"></div>
-
+    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+    <div th:replace="~{admin/fragments/script :: script}"></div>
 <form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
 </body>
 </html>

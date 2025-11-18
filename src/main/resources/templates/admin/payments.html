@@ -1,21 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/fragments/head :: head"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/head :: head}"></head>
 
 <body class="bg-theme bg-theme2">
-
-<!-- Start wrapper-->
-<div id="wrapper">
-
-    <!--Start sidebar-wrapper-->
-    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
-    <!--End sidebar-wrapper-->
-
-    <!--Start topbar header-->
-    <header th:replace="admin/fragments/header :: header"></header>
-    <!--End topbar header-->
-
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+    <header th:replace="~{admin/fragments/header :: header}"></header>
     <div class="clearfix"></div>
+
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
@@ -39,13 +31,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="p : ${payments}">
+                                    <tr th:each="p : ${paymentPage.content}">
                                         <td th:text="${p.id}">1</td>
                                         <td th:text="${p.booking?.id}">123</td>
-                                        <td th:text="${p.booking?.user?.username}">client_user</td>
-                                        <td th:text="${'$' + #numbers.formatDecimal(p.amount, 1, 2)}">$215.00</td>
-                                        <td th:text="${p.transactionCode}">VNP12345</td>
-                                        <td th:text="${#temporals.format(p.paymentDate, 'dd/MM/yyyy HH:mm')}">08/11/2025 10:30</td>
+                                        <td th:text="${p.booking?.user?.username}">...</td>
+                                        <td th:text="${'$' + #numbers.formatDecimal(p.amount, 1, 2)}">...</td>
+                                        <td th:text="${p.transactionCode}">...</td>
+                                        <td th:text="${#temporals.format(p.paymentDate, 'dd/MM/yyyy HH:mm')}">...</td>
                                         <td>
                                             <span th:text="${p.status}"
                                                   th:classappend="${p.status == 'SUCCESS'} ? 'text-success' : 'text-danger'">
@@ -53,23 +45,36 @@
                                             </span>
                                         </td>
                                     </tr>
+                                    <tr th:if="${paymentPage.empty}">
+                                        <td colspan="7" class="text-center">No payments found.</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <nav th:if="${paymentPage.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${paymentPage.first} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/payments(page=${paymentPage.number - 1}, size=${paymentPage.size})}"><i class="fa fa-angle-left"></i></a>
+                            </li>
+                            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, paymentPage.totalPages - 1)}"
+                                th:classappend="${pageNumber == paymentPage.number} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/payments(page=${pageNumber}, size=${paymentPage.size})}"
+                                   th:text="${pageNumber + 1}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${paymentPage.last} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/payments(page=${paymentPage.number + 1}, size=${paymentPage.size})}"><i class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-    </div><!--End wrapper-->
-</div>
-<!--Start footer-->
-<footer th:replace="admin/fragments/footer :: footer"></footer>
-<!--End footer-->
-
-<!-- Bootstrap core JavaScript-->
-<div th:replace="admin/fragments/script :: script"></div>
-
+    </div>
+    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+    <div th:replace="~{admin/fragments/script :: script}"></div>
 <form th:action="@{/logout}" method="post" id="logoutForm" style="display: none;"></form>
 </body>
 </html>

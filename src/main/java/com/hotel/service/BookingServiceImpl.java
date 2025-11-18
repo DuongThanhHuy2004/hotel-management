@@ -20,6 +20,8 @@ import com.hotel.entity.Payment;
 import com.hotel.repository.PaymentRepository;
 import com.hotel.dto.BookingCalendarDto;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public
@@ -93,8 +95,8 @@ class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAll() {
-        return bookingRepository.findAll();
+    public Page<Booking> findAll(Pageable pageable) {
+        return bookingRepository.findAllByOrderByIdDesc(pageable);
     }
 
     @Override
@@ -118,8 +120,8 @@ class BookingServiceImpl implements BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<Booking> findBookingsByUsername(String username) {
-        return bookingRepository.findByUserUsernameOrderByBookingDateDesc(username);
+    public Page<Booking> findBookingsByUsername(String username,  Pageable pageable) {
+        return bookingRepository.findByUserUsernameOrderByBookingDateDesc(username, pageable);
     }
 
     private void recalculateTotalPrice(Booking booking) {

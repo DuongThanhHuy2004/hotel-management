@@ -4,7 +4,8 @@ import com.hotel.dto.ContactDto;
 import com.hotel.entity.Contact;
 import com.hotel.repository.ContactRepository;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -28,11 +29,6 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> findAll() {
-        return contactRepository.findAllByOrderBySentAtDesc();
-    }
-
-    @Override
     public Contact findById(Long id) {
         return contactRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contact message not found"));
@@ -43,5 +39,9 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = findById(id);
         contact.setRead(true);
         contactRepository.save(contact);
+    }
+    @Override
+    public Page<Contact> findAll(Pageable pageable) {
+        return contactRepository.findAllByOrderBySentAtDesc(pageable);
     }
 }

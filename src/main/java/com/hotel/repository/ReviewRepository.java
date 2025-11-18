@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
+import org.springframework.data.domain.Page; // THÊM
+import org.springframework.data.domain.Pageable;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
@@ -15,4 +17,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT COALESCE(AVG(r.rating), 0.0) FROM Review r WHERE r.room.id = :roomId")
     Double getAverageRatingByRoomId(@Param("roomId") Long roomId);
     List<Review> findTop3ByOrderByCreatedAtDesc();
+    Page<Review> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

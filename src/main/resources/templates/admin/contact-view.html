@@ -5,7 +5,6 @@
 <body class="bg-theme bg-theme2">
 
 <!-- Start wrapper-->
-<div id="wrapper">
 
     <!--Start sidebar-wrapper-->
     <div th:replace="admin/fragments/sidebar :: sidebar"></div>
@@ -28,11 +27,11 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 classV="card-title">Subject: <span th:text="${contact.subject}"></span></h5>
+                            <h5 class="card-title">Subject: <span th:text="${contact.subject}"></span></h5>
                             <p><strong>From:</strong> <span th:text="${contact.fullName}"></span> (<span th:text="${contact.email}"></span>)</p>
                             <p><strong>Received:</strong> <span th:text="${#temporals.format(contact.sentAt, 'dd/MM/yyyy HH:mm')}"></span></p>
                             <hr>
-                            <pre style="white-space: pre-wrap; font-family: inherit;" th:text="${contact.message}">Message content...</pre>
+                            <pre style="white-space: pre-wrap; font-family: inherit; color: #FFFFFF;" th:text="${contact.message}">Message content...</pre>
                         </div>
                     </div>
                 </div>

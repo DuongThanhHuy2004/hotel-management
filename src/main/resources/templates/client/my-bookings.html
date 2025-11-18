@@ -14,6 +14,14 @@
     <i class="icon_menu"></i>
 </div>
 <div class="offcanvas-menu-wrapper">
+    <nav class="mainmenu mobile-menu">
+        <ul>
+            <li class="active"><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/rooms}">Rooms</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+        </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
 </div>
 <header th:replace="~{client/fragments/header :: header}"></header>
 <div class="breadcrumb-section">
@@ -42,84 +50,102 @@
 
     <div class="row">
 
-        <div class="col-lg-12" th:if="${bookings.isEmpty()}">
-            <p>You have no bookings yet. <a th:href="@{/rooms}">Find a room now!</a></p>
+        <div class="col-lg-12" th:if="${bookingPage.empty}"> <p>You have no bookings yet. <a th:href="@{/rooms}">Find a room now!</a></p>
         </div>
 
-        <div class="col-lg-6 col-md-6" th:each="b : ${bookings}">
-            <div class="room-item">
-                <img th:src="@{${b.room.imageUrl}}" alt="Room Image">
-                <div class="ri-text">
-                    <h4 th:text="${b.room.roomType.name}">Deluxe Room</h4>
-                    <h3><span th:text="${#numbers.formatDecimal(b.totalPrice, 1, 2)}">...</span>$
-                        <span style="font-size: 16px; font-weight: 400;">/ Total</span>
-                    </h3>
+        <div class="col-lg-6 col-md-6" th:each="b : ${bookingPage.content}"> <div class="room-item">
+            <img th:src="@{${b.room.imageUrl}}" alt="Room Image">
+            <div class="ri-text">
+                <h4 th:text="${b.room.roomType.name}">Deluxe Room</h4>
+                <h3><span th:text="${#numbers.formatDecimal(b.totalPrice, 1, 2)}">...</span>$
+                    <span style="font-size: 16px; font-weight: 400;">/ Total</span>
+                </h3>
 
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td class="r-o">Check-in:</td>
-                            <td th:text="${b.checkInDate}">2025-10-26</td>
-                        </tr>
-                        <tr>
-                            <td class="r-o">Check-out:</td>
-                            <td th:text="${b.checkOutDate}">2025-10-30</td>
-                        </tr>
-                        <tr>
-                            <td class="r-o">Status:</td>
-                            <td>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td class="r-o">Check-in:</td>
+                        <td th:text="${b.checkInDate}">2025-10-26</td>
+                    </tr>
+                    <tr>
+                        <td class="r-o">Check-out:</td>
+                        <td th:text="${b.checkOutDate}">2025-10-30</td>
+                    </tr>
+                    <tr>
+                        <td class="r-o">Status:</td>
+                        <td>
                                     <span th:text="${b.status}"
                                           th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
                                                           (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')"
                                           style="font-weight: bold;">
                                         PENDING
                                     </span>
-                            </td>
-                        </tr>
-                        <tr th:if="${!b.services.isEmpty()}">
-                            <td class="r-o" style="vertical-align: top;">Services:</td>
-                            <td style="font-size: 0.9em;">
-                                <span th:each="s : ${b.services}" th:text="${s.name + ', '}"></span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        </td>
+                    </tr>
+                    <tr th:if="${!b.services.isEmpty()}">
+                        <td class="r-o" style="vertical-align: top;">Services:</td>
+                        <td style="font-size: 0.9em;">
+                                    <span th:each="s, iterStat : ${b.services}"
+                                          th:text="${s.name} + (${iterStat.last} ? '' : ', ')"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-                    <div class="booking-actions" style="margin-top: 15px;">
+                <div class="booking-actions" style="margin-top: 15px;">
 
-                        <a th:if="${b.status == 'PENDING'}"
-                           th:href="@{/payment/create-payment/{bookingId}(bookingId=${b.id})}"
-                           class="btn btn-warning btn-sm">
-                            Pay Now
-                        </a>
+                    <a th:if="${b.status == 'PENDING'}"
+                       th:href="@{/payment/create-payment/{bookingId}(bookingId=${b.id})}"
+                       class="btn btn-warning btn-sm">
+                        Pay Now
+                    </a>
 
-                        <a th:if="${b.status == 'PENDING'}"
-                           th:href="@{/booking/cancel/{id}(id=${b.id})}"
-                           onclick="return confirm('Are you sure you want to cancel this booking?')"
-                           class="btn btn-danger btn-sm">
-                            Cancel
-                        </a>
+                    <a th:if="${b.status == 'PENDING'}"
+                       th:href="@{/booking/cancel/{id}(id=${b.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to cancel this booking?')">
+                        Cancel
+                    </a>
 
-                        <a th:if="${b.status == 'CONFIRMED' and
+                    <a th:if="${b.status == 'CONFIRMED' and
                                        b.checkOutDate.isBefore(T(java.time.LocalDate).now()) and
                                        !b.hasReviewed}"
-                           th:href="@{/write-review/{id}(id=${b.id})}"
-                           class="btn btn-success btn-sm">
-                            Write a Review
-                        </a>
+                       th:href="@{/write-review/{id}(id=${b.id})}"
+                       class="btn btn-success btn-sm">
+                        Write a Review
+                    </a>
 
-                        <span th:if="${b.hasReviewed}" class="text-success" style="font-weight: bold; display: block; text-align: center;">✓ Reviewed</span>
-                    </div>
-
+                    <span th:if="${b.hasReviewed}" class="text-success" style="font-weight: bold; display: block; text-align: center; padding: 10px;">✓ Reviewed</span>
                 </div>
             </div>
+        </div>
+        </div>
+        <div class="col-lg-12">
+            <nav th:if="${bookingPage.totalPages > 0}" aria-label="Page navigation">
+                <ul class="pagination justify-content-center" style="margin-top: 30px;">
+
+                    <li class="page-item" th:classappend="${bookingPage.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/my-bookings(page=${bookingPage.number - 1}, size=${bookingPage.size})}"><i class="fa fa-angle-left"></i></a>
+                    </li>
+
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, bookingPage.totalPages - 1)}"
+                        th:classappend="${pageNumber == bookingPage.number} ? 'active'">
+                        <a class="page-link" th:href="@{/my-bookings(page=${pageNumber}, size=${bookingPage.size})}"
+                           th:text="${pageNumber + 1}"></a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${bookingPage.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/my-bookings(page=${bookingPage.number + 1}, size=${bookingPage.size})}"><i class="fa fa-angle-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 </section>
 <footer th:replace="~{client/fragments/footer :: footer}"></footer>
 <div class="search-model">
-    <div class="h-100 d:flex align-items-center justify-content-center">
+    <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch"><i class="icon_close"></i></div>
         <form class="search-model-form">
             <label for="search-input"></label><input type="text" id="search-input" placeholder="Search here.....">

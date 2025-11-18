@@ -5,6 +5,8 @@ import com.hotel.entity.HotelService;
 import com.hotel.repository.ServiceRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service // Chú ý đây là @Service của Spring
 public class ServiceServiceImpl implements ServiceService {
@@ -44,5 +46,10 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void deleteById(Long id) {
         serviceRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<HotelService> findAll(Pageable pageable) {
+        return serviceRepository.findAllByOrderByIdDesc(pageable);
     }
 }

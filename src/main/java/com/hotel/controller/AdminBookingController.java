@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/bookings")
@@ -28,8 +33,19 @@ public class AdminBookingController {
     }
 
     @GetMapping
-    public String listBookings(Model model) {
-        model.addAttribute("bookings", bookingService.findAll());
+    public String listBookings(Model model,
+                               @RequestParam(name = "page", defaultValue = "0") int page,
+                               @RequestParam(name = "size", defaultValue = "10") int size) {
+
+        // Tạo đối tượng Pageable (trang hiện tại, số lượng mỗi trang)
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Gọi service đã được phân trang
+        Page<Booking> bookingPage = bookingService.findAll(pageable);
+
+        // Gửi đối tượng Page ra view
+        model.addAttribute("bookingPage", bookingPage);
+
         return "admin/bookings";
     }
 

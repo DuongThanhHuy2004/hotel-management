@@ -6,6 +6,10 @@ import com.hotel.repository.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+// Import cho Phân trang (Sprint 14)
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class RoomTypeServiceImpl implements RoomTypeService {
 
@@ -18,6 +22,11 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     @Override
     public List<RoomType> findAll() {
         return roomTypeRepository.findAll();
+    }
+
+    @Override
+    public Page<RoomType> findAll(Pageable pageable) {
+        return roomTypeRepository.findAllByOrderByIdDesc(pageable);
     }
 
     @Override
