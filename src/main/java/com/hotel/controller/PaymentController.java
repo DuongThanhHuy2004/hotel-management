@@ -35,9 +35,9 @@ public class PaymentController {
         int result = paymentService.handlePaymentCallback(request);
 
         if (result == 1) { // Thành công
-            return "client/payment-success"; // (Sẽ tạo ở bước 6)
+            return "client/payment-success";
         } else if (result == 2) { // Thất bại
-            return "client/payment-fail"; // (Sẽ tạo ở bước 6)
+            return "client/payment-fail";
         } else { // Chữ ký không hợp lệ
             return "client/payment-fail";
         }

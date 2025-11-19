@@ -30,7 +30,7 @@ public class AdminReviewController {
                               @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Review> reviewPage = reviewService.findAll(pageable);
-        model.addAttribute("reviewPage", reviewPage); // Đổi tên biến
+        model.addAttribute("reviewPage", reviewPage);
         return "admin/reviews";
     }
 

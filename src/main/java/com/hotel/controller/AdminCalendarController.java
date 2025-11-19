@@ -10,6 +10,6 @@ public class AdminCalendarController {
 
     @GetMapping
     public String showCalendarPage() {
-        return "admin/calendar"; // (Sẽ tạo ở bước 7)
+        return "admin/calendar";
     }
 }

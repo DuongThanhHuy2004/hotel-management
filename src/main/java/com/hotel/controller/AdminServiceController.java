@@ -28,9 +28,8 @@ public class AdminServiceController {
                                @RequestParam(name = "page", defaultValue = "0") int page,
                                @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        // Gọi hàm mới có Pageable
         Page<HotelService> servicePage = serviceService.findAll(pageable);
-        model.addAttribute("servicePage", servicePage); // Đổi tên biến
+        model.addAttribute("servicePage", servicePage);
         return "admin/services";
     }
 
@@ -38,7 +37,7 @@ public class AdminServiceController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("serviceDto", new ServiceDto());
-        return "admin/service-form"; // (Sẽ tạo ở bước 8)
+        return "admin/service-form";
     }
 
     // U (Update) - Show form

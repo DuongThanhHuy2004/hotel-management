@@ -98,7 +98,7 @@ public class RoomServiceImpl implements RoomService {
      * Dùng cho trang chủ Sona (hiển thị 3 phòng)
      */
     @Override
-    public List<Room> findTop3ByOrderByIdDesc() {
-        return roomRepository.findTop3ByOrderByIdDesc();
+    public List<Room> findTop4ByOrderByIdDesc() {
+        return roomRepository.findTop4ByOrderByIdDesc();
     }
 }

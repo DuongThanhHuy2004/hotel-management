@@ -36,7 +36,7 @@ public class User {
     // --- THÊM CÁC TRƯỜNG MỚI ---
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    private Provider provider; // (LOCAL, GOOGLE, FACEBOOK)
+    private Provider provider; // (LOCAL, GOOGLE)
 
     private String providerId; // ID của user đó trên Google
 

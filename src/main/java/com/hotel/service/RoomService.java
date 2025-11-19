@@ -16,5 +16,5 @@ public interface RoomService {
     Room findById(Long id);
     void save(RoomDto dto, MultipartFile imageFile);
     void deleteById(Long id);
-    List<Room> findTop3ByOrderByIdDesc();
+    List<Room> findTop4ByOrderByIdDesc();
 }

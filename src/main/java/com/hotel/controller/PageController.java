@@ -16,14 +16,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import com.hotel.dto.PasswordChangeDto;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import com.hotel.entity.Booking;
 import com.hotel.entity.Room;
-import com.hotel.entity.Review;
 
 
 @Controller
@@ -69,8 +67,8 @@ public class PageController {
                 }
             }
         }
-        // 1. Lấy 3 phòng mới nhất
-        model.addAttribute("featuredRooms", roomService.findTop3ByOrderByIdDesc());
+        // 1. Lấy 4 phòng mới nhất
+        model.addAttribute("featuredRooms", roomService.findTop4ByOrderByIdDesc());
 
         // 2. Lấy 3 review mới nhất
         model.addAttribute("latestReviews", reviewService.findTop3ByOrderByCreatedAtDesc());
@@ -106,8 +104,8 @@ public class PageController {
             roomPage = roomService.findAll(pageable);
         }
 
-        model.addAttribute("roomPage", roomPage); // Gửi Page object
-        model.addAttribute("checkInDate", checkInDate); // Gửi lại để form nhớ
+        model.addAttribute("roomPage", roomPage);
+        model.addAttribute("checkInDate", checkInDate);
         model.addAttribute("checkOutDate", checkOutDate);
 
         return "client/rooms";
@@ -150,7 +148,6 @@ public class PageController {
         return "client/contact";
     }
 
-
     @PostMapping("/contact/send")
     public String sendContactMessage(@ModelAttribute("contactDto") ContactDto contactDto,
                                      RedirectAttributes redirectAttributes) {
@@ -163,13 +160,11 @@ public class PageController {
         return "redirect:/contact";
     }
 
-
     @GetMapping("/profile")
     public String showProfilePage(Model model) {
         model.addAttribute("passwordDto", new PasswordChangeDto());
         return "client/profile";
     }
-
 
     @PostMapping("/profile/change-password")
     public String changePassword(@ModelAttribute("passwordDto") PasswordChangeDto passwordDto,

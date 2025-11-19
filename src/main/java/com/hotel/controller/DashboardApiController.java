@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-@RestController // <-- Dùng @RestController
+@RestController
 @RequestMapping("/api/dashboard")
 public class DashboardApiController {
 
@@ -22,9 +22,10 @@ public class DashboardApiController {
 
     // API cho biểu đồ "Site Traffic" (Doanh thu theo tháng)
     @GetMapping("/monthly-revenue")
-    public ResponseEntity<List<Map<String, Object>>> getMonthlyRevenue() {
-        int currentYear = LocalDate.now().getYear();
-        List<Map<String, Object>> data = bookingRepository.getMonthlyRevenue(currentYear);
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyRevenue(
+            @RequestParam(name = "year", required = false) Integer year) {
+        int targetYear = (year != null) ? year : LocalDate.now().getYear();
+        List<Map<String, Object>> data = bookingRepository.getMonthlyRevenue(targetYear);
         return ResponseEntity.ok(data);
     }
 

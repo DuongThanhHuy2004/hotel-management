@@ -9,6 +9,6 @@ public class UserDto {
     private String fullName;
     private String username;
     private String email;
-    private String password; // Sẽ để trống khi update (trừ khi muốn đổi)
-    private List<Long> roleIds; // Danh sách ID của các role
+    private String password;
+    private List<Long> roleIds;
 }

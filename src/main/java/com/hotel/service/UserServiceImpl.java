@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.hotel.enums.Provider; // Đảm bảo đã import
+import com.hotel.enums.Provider;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,10 +41,6 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerDto.getUsername());
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-
-        // ===================================
-        // SỬA LỖI Ở ĐÂY (Bỏ User.)
-        // ===================================
         user.setProvider(Provider.LOCAL);
 
         Role userRole = roleRepository.findByName("ROLE_USER")
@@ -52,7 +48,6 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
-
         userRepository.save(user);
     }
 
@@ -85,10 +80,6 @@ public class UserServiceImpl implements UserService {
             if (userRepository.existsByEmail(userDto.getEmail())) {
                 throw new RuntimeException("Email is already taken!");
             }
-
-            // ===================================
-            // SỬA LỖI Ở ĐÂY (Bỏ User.)
-            // ===================================
             user.setProvider(Provider.LOCAL);
         }
 
@@ -127,10 +118,6 @@ public class UserServiceImpl implements UserService {
     public void changePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // ===================================
-        // SỬA LỖI Ở ĐÂY (Bỏ User.)
-        // ===================================
         if (user.getProvider() == Provider.LOCAL) {
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
                 throw new RuntimeException("Incorrect old password.");
@@ -138,7 +125,6 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("Users logged in via Social cannot change password here.");
         }
-
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }

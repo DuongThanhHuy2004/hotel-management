@@ -62,10 +62,8 @@ public class AdminRoomController {
 
     @PostMapping("/save")
     public String saveRoom(@ModelAttribute("roomDto") RoomDto dto,
-                           @RequestParam("imageFile") MultipartFile imageFile) { // <-- THÊM MỚI
-
-        roomService.save(dto, imageFile); // <-- SỬA LẠI
-
+                           @RequestParam("imageFile") MultipartFile imageFile) {
+        roomService.save(dto, imageFile);
         return "redirect:/admin/rooms";
     }
 

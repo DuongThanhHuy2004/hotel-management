@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import com.hotel.entity.User;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -34,7 +32,7 @@ public class AdminController {
                             @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage = userService.findAllUsers(pageable);
-        model.addAttribute("userPage", userPage); // Đổi tên biến
+        model.addAttribute("userPage", userPage);
         return "admin/users";
     }
     // C (Create) - Show form
@@ -42,7 +40,7 @@ public class AdminController {
     public String showCreateForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         model.addAttribute("allRoles", roleRepository.findAll());
-        return "admin/user-form"; // (Sẽ tạo ở bước 7)
+        return "admin/user-form";
     }
 
     // U (Update) - Show form

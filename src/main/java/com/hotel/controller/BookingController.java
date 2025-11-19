@@ -34,7 +34,7 @@ public class BookingController {
         } else if (principal instanceof DefaultOAuth2User) {
             return ((DefaultOAuth2User) principal).getAttribute("email");
         } else {
-            return null; // Không xác định
+            return null;
         }
     }
 

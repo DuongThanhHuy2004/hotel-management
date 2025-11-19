@@ -26,14 +26,14 @@ public class AdminRoomTypeController {
                                 @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<RoomType> roomTypePage = roomTypeService.findAll(pageable);
-        model.addAttribute("roomTypePage", roomTypePage); // Đổi tên biến
+        model.addAttribute("roomTypePage", roomTypePage);
         return "admin/room-types";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("roomTypeDto", new RoomTypeDto());
-        return "admin/room-type-form"; // (Sẽ tạo view ở bước 8)
+        return "admin/room-type-form";
     }
 
     @GetMapping("/edit/{id}")

@@ -10,5 +10,5 @@ public class RoomDto {
     private String description;
     private String imageUrl;
     private boolean isAvailable;
-    private Long roomTypeId; // Chỉ cần ID của loại phòng
+    private Long roomTypeId;
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController // <-- Dùng @RestController vì đây là API
+@RestController
 @RequestMapping("/payment")
 public class PaymentApiController {
 

@@ -10,7 +10,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "services")
-public class HotelService { // Đặt tên là HotelService để tránh nhầm lẫn
+public class HotelService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

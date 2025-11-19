@@ -28,5 +28,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             Pageable pageable
     );
     Page<Room> findAllByOrderByIdDesc(Pageable pageable);
-    List<Room> findTop3ByOrderByIdDesc();
+    List<Room> findTop4ByOrderByIdDesc();
 }

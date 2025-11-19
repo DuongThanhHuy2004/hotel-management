@@ -14,55 +14,72 @@
         <div class="container-fluid">
 
             <div class="card mt-3">
-                <div class="card-content"> <div class="row row-group m-0"> <div class="col-12 col-lg-6 col-xl-3 border-light">
-                    <div class="card-body"> <h5 class="text-white mb-0" th:text="${summary.totalOrders}">0</h5>
-                        <div class="progress my-3" style="height:3px;">
-                            <div class="progress-bar" style="width:55%"></div>
+                <div class="card-content">
+                    <div class="row row-group m-0">
+
+                        <div class="col-12 col-lg-6 col-xl-3 border-light">
+                            <div class="card-body">
+                                <h5 class="text-white mb-0">
+                                    <span th:text="${summary.totalOrders}">0</span>
+                                    <span class="float-right"><i class="fa fa-shopping-cart"></i></span>
+                                </h5>
+                                <br>
+                                <p class="mb-0 text-white small-font">Pending Orders</p>
+                            </div>
                         </div>
-                        <p class="mb-0 text-white small-font">Pending Orders</p> </div>
-                </div>
-                    <div class="col-12 col-lg-6 col-xl-3 border-light">
-                        <div class="card-body"> <h5 class="text-white mb-0" th:text="${'$' + #numbers.formatDecimal(summary.totalRevenue, 1, 'COMMA', 2, 'POINT')}">$0.00</h5>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" style="width:55%"></div>
+
+                        <div class="col-12 col-lg-6 col-xl-3 border-light">
+                            <div class="card-body">
+                                <h5 class="text-white mb-0">
+                                    <span th:text="${#numbers.formatDecimal(summary.totalRevenue, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                                    <span class="float-right"><i class="fa fa-usd"></i></span>
+                                </h5>
+                                <br>
+                                <p class="mb-0 text-white small-font">Total Revenue (Confirmed)</p>
                             </div>
-                            <p class="mb-0 text-white small-font">Total Revenue (Confirmed)</p> </div>
-                    </div>
-                    <div class="col-12 col-lg-6 col-xl-3 border-light">
-                        <div class="card-body"> <h5 class="text-white mb-0" th:text="${summary.totalUsers}">0</h5>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" style="width:55%"></div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 col-xl-3 border-light">
+                            <div class="card-body">
+                                <h5 class="text-white mb-0">
+                                    <span th:text="${summary.totalUsers}">0</span>
+                                    <span class="float-right"><i class="fa fa-users"></i></span>
+                                </h5>
+                                <br>
+                                <p class="mb-0 text-white small-font">Total Users</p>
                             </div>
-                            <p class="mb-0 text-white small-font">Total Users</p> </div>
-                    </div>
-                    <div class="col-12 col-lg-6 col-xl-3 border-light">
-                        <div class="card-body"> <h5 class="text-white mb-0" th:text="${summary.unreadMessages}">0</h5>
-                            <div class="progress my-3" style="height:3px;">
-                                <div class="progress-bar" style="width:55%"></div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 col-xl-3 border-light">
+                            <div class="card-body">
+                                <h5 class="text-white mb-0">
+                                    <span th:text="${summary.unreadMessages}">0</span>
+                                    <span class="float-right"><i class="fa fa-envelope"></i></span>
+                                </h5>
+                                <br>
+                                <p class="mb-0 text-white small-font">Unread Messages</p>
                             </div>
-                            <p class="mb-0 text-white small-font">Unread Messages</p> </div>
+                        </div>
+
                     </div>
-                </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12 col-lg-8 col-xl-8">
                     <div class="card">
-                        <div class="card-header">Site Traffic
+                        <div class="card-header">
+                            Site Traffic
                             <div class="card-action">
-                                <div class="dropdown">
-                                    <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
-                                        <i class="icon-options"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="javascript:void();">Action</a>
-                                        <a class="dropdown-item" href="javascript:void();">Another action</a>
-                                        <a class="dropdown-item" href="javascript:void();">Something else here</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="javascript:void();">Separated link</a>
-                                    </div>
-                                </div>
+                                <select id="yearSelect" class="form-control form-control-sm"
+                                        style="background: rgba(255,255,255,0.2); color: white; border: none; cursor: pointer;">
+
+                                    <option value="2024" style="background: #333; color: white;">2024</option>
+                                    <option value="2025" selected style="background: #333; color: white;">2025</option>
+                                    <option value="2026" style="background: #333; color: white;">2026</option>
+                                    <option value="2027" style="background: #333; color: white;">2027</option>
+
+                                </select>
                             </div>
                         </div>
                         <div class="card-body">
@@ -145,7 +162,7 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
 
-    // Hàm tạo màu ngẫu nhiên cho biểu đồ tròn
+    // Hàm tạo màu ngẫu nhiên
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
         var color = '#';
@@ -157,59 +174,76 @@
 
     document.addEventListener("DOMContentLoaded", function() {
 
-        // 1. Xử lý Biểu đồ Line (Doanh thu theo tháng)
-        var ctx1 = document.getElementById("chart1");
-        if (ctx1) {
-            ctx1.getContext("2d"); // Lấy context
+        // --- BIẾN TOÀN CỤC ĐỂ GIỮ BIỂU ĐỒ ---
+        let revenueChart = null;
 
-            fetch('/api/dashboard/monthly-revenue')
+        // 1. HÀM VẼ BIỂU ĐỒ DOANH THU (Gọi API theo năm)
+        function loadRevenueChart(year) {
+            fetch('/api/dashboard/monthly-revenue?year=' + year) // Gửi năm lên Server
                 .then(response => response.json())
                 .then(apiData => {
+                    // Chuẩn bị dữ liệu
                     let monthlyRevenue = new Array(12).fill(0);
                     apiData.forEach(item => {
                         let monthIndex = item.month - 1;
                         monthlyRevenue[monthIndex] = item.revenue;
                     });
 
-                    // Tạo biểu đồ MỚI
-                    new Chart(ctx1, {
-                        type: 'line',
-                        data: {
-                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                            datasets: [{
-                                label: "Monthly Revenue (Confirmed)",
-                                data: monthlyRevenue,
-                                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                                borderColor: 'rgba(255, 255, 255, 0.5)',
-                                pointBackgroundColor: '#fff',
-                                fill: true, // Tô màu nền
-                                tension: 0.4
-                            }]
-                        },
-                        options: { // Thêm options để biểu đồ đẹp (giống template)
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: {
-                                x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } },
-                                y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.8)' } }
-                            }
+                    var ctx1 = document.getElementById("chart1");
+                    if (ctx1) {
+                        // Nếu biểu đồ đã tồn tại -> Xóa nó đi trước khi vẽ mới
+                        if (revenueChart) {
+                            revenueChart.destroy();
                         }
-                    });
+
+                        // Tạo biểu đồ mới
+                        revenueChart = new Chart(ctx1, {
+                            type: 'line',
+                            data: {
+                                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                datasets: [{
+                                    label: "Revenue " + year, // Hiển thị năm trên label
+                                    data: monthlyRevenue,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                                    pointBackgroundColor: '#fff',
+                                    fill: true,
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } },
+                                    y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.15)' } }
+                                }
+                            }
+                        });
+                    }
                 })
-                .catch(error => console.error('Error fetching monthly revenue:', error));
+                .catch(error => console.error('Error fetching revenue:', error));
         }
 
-        // 2. Xử lý Biểu đồ Tròn (Tỷ lệ loại phòng)
+        // --- KHỞI TẠO LẦN ĐẦU ---
+        // Lấy năm mặc định từ Dropdown (2025)
+        let currentYear = document.getElementById("yearSelect").value;
+        loadRevenueChart(currentYear);
+
+        // --- SỰ KIỆN KHI CHỌN DROPDOWN ---
+        document.getElementById("yearSelect").addEventListener("change", function() {
+            let selectedYear = this.value;
+            loadRevenueChart(selectedYear); // Gọi lại hàm vẽ với năm mới
+        });
+
+
+        // 2. Xử lý Biểu đồ Tròn (Giữ nguyên, không đổi)
         var chartTitleEl = document.getElementById("weeklySalesChartTitle");
-        if(chartTitleEl) {
-            chartTitleEl.innerText = "Room Type Popularity";
-        }
+        if(chartTitleEl) chartTitleEl.innerText = "Room Type Popularity";
 
         var ctx2 = document.getElementById("chart2");
         if (ctx2) {
-            ctx2.getContext("2d");
-
             fetch('/api/dashboard/room-type-popularity')
                 .then(response => response.json())
                 .then(apiData => {
@@ -220,10 +254,9 @@
                     apiData.forEach(item => {
                         labels.push(item.roomType);
                         counts.push(item.count);
-                        colors.push(getRandomColor()); // Tạo màu ngẫu nhiên
+                        colors.push(getRandomColor());
                     });
 
-                    // Tạo biểu đồ MỚI
                     new Chart(ctx2, {
                         type: 'doughnut',
                         data: {
@@ -241,29 +274,24 @@
                         }
                     });
 
-                    updateRoomTypeTable(apiData, colors); // Cập nhật bảng
-                })
-                .catch(error => console.error('Error fetching room type popularity:', error));
+                    updateRoomTypeTable(apiData, colors);
+                });
         }
 
         function updateRoomTypeTable(apiData, colors) {
             let tableBody = document.querySelector("#weeklySalesTableBody");
             if (!tableBody) return;
-
-            tableBody.innerHTML = ""; // Xóa dữ liệu cũ
+            tableBody.innerHTML = "";
             let total = apiData.reduce((sum, item) => sum + Number(item.count), 0);
 
             apiData.forEach((item, index) => {
                 let percentage = (total > 0) ? ((item.count / total) * 100).toFixed(0) : 0;
-                let color = colors[index] || '#ffffff'; // Lấy màu tương ứng
-
-                let row = `
-                    <tr>
+                let color = colors[index] || '#ffffff';
+                let row = `<tr>
                        <td><i class="fa fa-circle mr-2" style="color: ${color}"></i> ${item.roomType}</td>
                        <td>${item.count} bookings</td>
                        <td>+${percentage}%</td>
-                     </tr>
-                `;
+                     </tr>`;
                 tableBody.innerHTML += row;
             });
         }

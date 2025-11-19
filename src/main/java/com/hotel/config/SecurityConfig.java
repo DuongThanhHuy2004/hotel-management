@@ -60,9 +60,9 @@ public class SecurityConfig {
                                 .permitAll()
                 ).oauth2Login(
                         oauth2 -> oauth2
-                                .loginPage("/login") // Dùng chung trang login
+                                .loginPage("/login")
                                 .userInfoEndpoint(userInfo -> userInfo
-                                        .userService(oauth2UserService) // Dùng service ta vừa tạo
+                                        .userService(oauth2UserService)
                                 )
                                 .defaultSuccessUrl("/", false)
                 ).logout(
