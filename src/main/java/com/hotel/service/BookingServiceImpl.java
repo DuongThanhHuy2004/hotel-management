@@ -46,22 +46,22 @@ class BookingServiceImpl implements BookingService {
         // 1. Kiểm tra ngày hợp lệ
         if (bookingDto.getCheckInDate().isAfter(bookingDto.getCheckOutDate()) ||
                 bookingDto.getCheckInDate().isEqual(bookingDto.getCheckOutDate())) {
-            throw new RuntimeException("Check-out date must be after check-in date.");
+            throw new RuntimeException("Ngày trả phòng phải sau ngày nhận phòng.");
         }
         if (bookingDto.getCheckInDate().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Check-in date cannot be in the past.");
+            throw new RuntimeException("Ngày nhận phòng không thể ở quá khứ.");
         }
 
         // 2. Kiểm tra phòng có trống không
         if (!isRoomAvailable(bookingDto.getRoomId(), bookingDto.getCheckInDate(), bookingDto.getCheckOutDate())) {
-            throw new RuntimeException("Room is not available for the selected dates.");
+            throw new RuntimeException("Không có phòng trống cho ngày đã chọn.");
         }
 
         // 3. Lấy thông tin User và Room
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         Room room = roomRepository.findById(bookingDto.getRoomId())
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phòng"));
 
         // 4. (MỚI) Lấy danh sách dịch vụ
         Set<HotelService> services = new HashSet<>();
@@ -102,7 +102,7 @@ class BookingServiceImpl implements BookingService {
     @Override
     public Booking findById(Long id) {
         return bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn"));
     }
 
     @Override
@@ -141,7 +141,7 @@ class BookingServiceImpl implements BookingService {
     public void addServiceToBooking(Long bookingId, Long serviceId) {
         Booking booking = findById(bookingId);
         HotelService service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy dịch vụ"));
 
         // Thêm dịch vụ vào đơn
         booking.getServices().add(service);
@@ -157,7 +157,7 @@ class BookingServiceImpl implements BookingService {
     public void removeServiceFromBooking(Long bookingId, Long serviceId) {
         Booking booking = findById(bookingId);
         HotelService service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy dịch vụ"));
 
         // Xóa dịch vụ khỏi đơn
         booking.getServices().remove(service);
@@ -171,16 +171,16 @@ class BookingServiceImpl implements BookingService {
 
     @Override
     public void cancelMyBooking(Long bookingId, String username) {
-        Booking booking = findById(bookingId); // Dùng hàm findById có sẵn
+        Booking booking = findById(bookingId);
 
         // 1. Kiểm tra xem đơn này có phải của user này không
         if (!booking.getUser().getUsername().equals(username)) {
-            throw new AccessDeniedException("You do not have permission to cancel this booking.");
+            throw new AccessDeniedException("Bạn không có quyền hủy.");
         }
 
         // 2. Kiểm tra xem đơn có đang PENDING không
         if (!"PENDING".equals(booking.getStatus())) {
-            throw new RuntimeException("This booking cannot be canceled.");
+            throw new RuntimeException("Đơn này không thể hủy.");
         }
 
         // 3. Hủy đơn (dùng lại logic cũ)
@@ -220,7 +220,7 @@ class BookingServiceImpl implements BookingService {
 
         // Ngày kết thúc (FullCalendar coi ngày kết thúc là độc quyền (exclusive))
         // Vì vậy, check-out ngày 12 thì event sẽ kết thúc vào đầu ngày 12 (hiển thị đến hết ngày 11).
-        // Đây chính là logic đúng của chúng ta.
+        // Đây chính là logic đúng
         dto.setEnd(booking.getCheckOutDate().toString());
 
         // Đặt màu dựa trên trạng thái

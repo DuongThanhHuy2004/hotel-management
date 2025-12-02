@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zxx" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head th:replace="~{client/fragments/head :: head}"></head>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{client/fragments/head :: head}"></head>
 
 <body>
 <div id="preloder">
@@ -29,12 +29,12 @@
                 </ul>
             </div>
         </div>
-        <a th:href="@{/rooms}" class="bk-btn">Booking Now</a> </div>
+        <a th:href="@{/rooms}" class="bk-btn">Đặt Ngay</a> </div>
     <nav class="mainmenu mobile-menu">
         <ul>
-            <li class="active"><a th:href="@{/}">Home</a></li>
-            <li><a th:href="@{/rooms}">Rooms</a></li>
-            <li><a th:href="@{/contact}">Contact</a></li>
+            <li class="active"><a th:href="@{/}">Trang chủ</a></li>
+            <li><a th:href="@{/rooms}">Phòng</a></li>
+            <li><a th:href="@{/contact}">Liên hệ</a></li>
         </ul>
     </nav>
     <div id="mobile-menu-wrap"></div>
@@ -56,13 +56,12 @@
             <div class="col-lg-6">
                 <div class="hero-text">
                     <h1>Sona A Luxury Hotel</h1>
-                    <p>Here are the best hotel booking sites, including recommendations for international
-                        travel and for finding low-priced hotel rooms.</p>
-                    <a th:href="@{/rooms}" class="primary-btn">Discover Now</a> </div>
+                    <p>"Trải nghiệm dịch vụ đặt phòng đẳng cấp, bao gồm các tư vấn du lịch quốc tế và những ưu đãi phòng nghỉ hấp dẫn nhất."</p>
+                    <a th:href="@{/rooms}" class="primary-btn">Khám phá ngay</a> </div>
             </div>
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                 <div class="booking-form">
-                    <h3>Booking Your Room</h3>
+                    <h3>Đặt Phòng Ngay</h3>
 
                     <form th:action="@{/rooms}" method="get">
                         <div class="check-date">
@@ -75,19 +74,7 @@
                             <input type="text" class="date-input" id="check-out" name="checkOutDate">
                             <i class="icon_calendar"></i>
                         </div>
-                        <div class="select-option">
-                            <label for="guest">Guests:</label>
-                            <select id="guest">
-                                <option value="">2 Adults</option>
-                            </select>
-                        </div>
-                        <div class="select-option">
-                            <label for="room">Room:</label>
-                            <select id="room">
-                                <option value="">1 Room</option>
-                            </select>
-                        </div>
-                        <button type="submit">Check Availability</button>
+                        <button type="submit">Tìm Phòng</button>
                     </form>
                 </div>
             </div>
@@ -111,16 +98,16 @@
                     <div class="hp-room-item set-bg" th:data-setbg="@{${room.imageUrl}}">
                         <div class="hr-text">
                             <h3 th:text="${room.roomType.name}">Deluxe Room</h3>
-                            <h2><span th:text="${#numbers.formatDecimal(room.price, 1, 2)}">159</span>$<span>/Pernight</span></h2>
+                            <h2><span th:text="${#numbers.formatDecimal(room.price, 1, 2)}">159</span>$<span>/Đêm</span></h2>
                             <table>
                                 <tbody>
                                 <tr>
-                                    <td class="r-o">Number:</td>
+                                    <td class="r-o">Số phòng:</td>
                                     <td th:text="${room.roomNumber}">101</td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <a th:href="@{/room-details/{id}(id=${room.id})}" class="primary-btn">More Details</a>
+                            <a th:href="@{/room-details/{id}(id=${room.id})}" class="primary-btn">CHI TIẾT</a>
                         </div>
                     </div>
                 </div>
@@ -133,8 +120,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <span>Testimonials</span>
-                    <h2>What Customers Say?</h2>
+                    <span>Cảm Nhận Khách Hàng</span>
+                    <h2>Khách Hàng Nói Gì Về Chúng Tôi?</h2>
                 </div>
             </div>
         </div>
@@ -147,7 +134,8 @@
                         <div class="ti-author">
                             <div class="rating">
                                 <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fa fa-star"></i>
-                                <i th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="fa fa-star-o"></i>
+                                <i th:if="${review.rating < 5}"
+                                   th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="fa fa-star-o"></i>
                             </div>
                             <h5 th:text="' - ' + ${review.user.username}"> - User Name</h5>
                         </div>

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,40 +33,56 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**", "/").permitAll()
+                        authorize
+                                // --- PUBLIC (Ai cũng vào được) ---
+                                .requestMatchers("/register/**", "/").permitAll()
                                 .requestMatchers("/sona/**", "/dashtreme/**").permitAll()
-                                .requestMatchers("/admin/dashboard").hasRole("ADMIN")
-                                .requestMatchers("/admin/users/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/room-types/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/rooms/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/bookings/**").hasRole("ADMIN")
                                 .requestMatchers("/rooms", "/room-details/**").permitAll()
-                                .requestMatchers("/booking/**").authenticated()
-                                .requestMatchers("/admin/services/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/payments/**").hasRole("ADMIN")
-                                .requestMatchers("/admin/contacts/**").hasRole("ADMIN")
                                 .requestMatchers("/contact", "/contact/send").permitAll()
-                                .requestMatchers("/api/dashboard/**").hasRole("ADMIN")
+                                .requestMatchers("/login/**").permitAll()
+
+                                // --- ADMIN (Chỉ quản trị viên) ---
+                                .requestMatchers("/admin/dashboard").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/users/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/room-types/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/rooms/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/bookings/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/services/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/payments/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/contacts/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/admin/calendar/**").hasAnyRole("ADMIN", "STAFF")
+                                // API cho Dashboard & Calendar
+                                .requestMatchers("/api/dashboard/**").hasAnyRole("ADMIN", "STAFF")
+                                .requestMatchers("/api/calendar/**").hasAnyRole("ADMIN", "STAFF")
+
+                                // --- AUTHENTICATED (Phải đăng nhập: User hoặc Admin) ---
+                                .requestMatchers("/booking/**").authenticated()
                                 .requestMatchers("/write-review/**", "/submit-review").authenticated()
-                                .requestMatchers("/admin/calendar/**").hasRole("ADMIN")
-                                .requestMatchers("/api/calendar/**").hasRole("ADMIN")
+
+                                .requestMatchers("/profile/**").authenticated()
+                                .requestMatchers("/my-bookings").authenticated()
+
+                                // Tất cả các request khác đều phải đăng nhập
                                 .anyRequest().authenticated()
-                ).formLogin(
+                )
+                .formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
                                 .defaultSuccessUrl("/", false)
                                 .permitAll()
-                ).oauth2Login(
+                )
+                .oauth2Login(
                         oauth2 -> oauth2
                                 .loginPage("/login")
                                 .userInfoEndpoint(userInfo -> userInfo
                                         .userService(oauth2UserService)
                                 )
                                 .defaultSuccessUrl("/", false)
-                ).logout(
+                )
+                .logout(
                         logout -> logout
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/login?logout")

@@ -55,6 +55,6 @@ public class Booking {
     @Column(name = "has_reviewed")
     private boolean hasReviewed = false;
 
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL) // Thêm liên kết
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Review review;
 }

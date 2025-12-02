@@ -11,9 +11,9 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
-                <div class="col-sm-9"><h4 class="page-title">Service Management</h4></div>
+                <div class="col-sm-9"><h4 class="page-title">Quản Lý Dịch Vụ</h4></div>
                 <div class="col-sm-3">
-                    <a th:href="@{/admin/services/new}" class="btn btn-light float-sm-right">Add New Service</a>
+                    <a th:href="@{/admin/services/new}" class="btn btn-light float-sm-right">Thêm</a>
                 </div>
             </div>
             <div class="row">
@@ -25,10 +25,10 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Description</th>
-                                        <th>Actions</th>
+                                        <th>Tên</th>
+                                        <th>Giá</th>
+                                        <th>Mô Tả</th>
+                                        <th>Chức năng</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -38,9 +38,9 @@
                                         <td th:text="${'$' + #numbers.formatDecimal(s.price, 1, 2)}">$15.0</td>
                                         <td th:text="${s.description}">...</td>
                                         <td>
-                                            <a th:href="@{/admin/services/edit/{id}(id=${s.id})}" class="btn btn-light btn-sm">Edit</a>
+                                            <a th:href="@{/admin/services/edit/{id}(id=${s.id})}" class="btn btn-light btn-sm">Sửa</a>
                                             <a th:href="@{/admin/services/delete/{id}(id=${s.id})}" class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Delete this service?')">Delete</a>
+                                               onclick="return confirm('Delete this service?')">Xóa</a>
                                         </td>
                                     </tr>
                                     <tr th:if="${servicePage.empty}">

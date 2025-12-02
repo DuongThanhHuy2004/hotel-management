@@ -13,7 +13,7 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
-                <div class="col-sm-9"><h4 class="page-title">Booking Management</h4></div>
+                <div class="col-sm-9"><h4 class="page-title">Quản lý đặt phòng</h4></div>
             </div>
 
             <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
@@ -28,13 +28,13 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>User</th>
-                                        <th>Room</th>
+                                        <th>Tài khoản</th>
+                                        <th>Phòng</th>
                                         <th>Check-in</th>
                                         <th>Check-out</th>
-                                        <th>Total Price</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Chức năng</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -49,14 +49,14 @@
                                         <td>
                                             <span th:text="${b.status}"
                                                   th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
-                                                                  (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">PENDING</span>
+                                                                  (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')">Chờ</span>
                                         </td>
                                         <td>
                                             <a th:href="@{/admin/bookings/{id}/services(id=${b.id})}" class="btn btn-info btn-sm"
-                                               th:if="${b.status != 'CANCELED'}" style="margin-bottom: 5px;">Manage Services</a>
+                                               th:if="${b.status != 'CANCELED'}" style="margin-bottom: 5px;">Quản lý dịch vụ</a>
                                             <div th:if="${b.status == 'PENDING'}">
-                                                <a th:href="@{/admin/bookings/confirm/{id}(id=${b.id})}" class="btn btn-success btn-sm">Confirm</a>
-                                                <a th:href="@{/admin/bookings/cancel/{id}(id=${b.id})}" class="btn btn-danger btn-sm">Cancel</a>
+                                                <a th:href="@{/admin/bookings/confirm/{id}(id=${b.id})}" class="btn btn-success btn-sm">Xác nhận</a>
+                                                <a th:href="@{/admin/bookings/cancel/{id}(id=${b.id})}" class="btn btn-danger btn-sm">Hủy</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -62,7 +62,7 @@ public class PageController {
     public String home(Authentication authentication, Model model) {
         if (authentication != null && authentication.isAuthenticated()) {
             for (GrantedAuthority auth : authentication.getAuthorities()) {
-                if ("ROLE_ADMIN".equals(auth.getAuthority())) {
+                if ("ROLE_ADMIN".equals(auth.getAuthority()) || "ROLE_STAFF".equals(auth.getAuthority())) {
                     return "redirect:/admin/dashboard";
                 }
             }
@@ -127,7 +127,7 @@ public class PageController {
     @GetMapping("/my-bookings")
     public String myBookings(Model model, Authentication authentication,
                              @RequestParam(name = "page", defaultValue = "0") int page,
-                             @RequestParam(name = "size", defaultValue = "5") int size) {
+                             @RequestParam(name = "size", defaultValue = "6") int size) {
 
         String username = getLoggedInUsername(authentication);
         if (username == null) {
@@ -153,9 +153,9 @@ public class PageController {
                                      RedirectAttributes redirectAttributes) {
         try {
             contactService.saveContact(contactDto);
-            redirectAttributes.addFlashAttribute("successMessage", "Your message has been sent successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "Tin nhắn của bạn đã được gửi thành công");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error sending message. Please try again.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi gửi tin nhắn, hãy thử lại");
         }
         return "redirect:/contact";
     }
@@ -177,13 +177,13 @@ public class PageController {
         }
 
         if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmPassword())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "New passwords do not match.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới không khớp");
             return "redirect:/profile";
         }
 
         try {
             userService.changePassword(username, passwordDto.getOldPassword(), passwordDto.getNewPassword());
-            redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }

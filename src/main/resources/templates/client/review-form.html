@@ -73,10 +73,10 @@
     <div class="container">
         <div class="row"><div class="col-lg-12">
             <div class="breadcrumb-text">
-                <h2>Write a Review</h2>
+                <h2>Viết đánh giá</h2>
                 <div class="bt-option">
                     <a th:href="@{/my-bookings}">My Bookings</a>
-                    <span>Review</span>
+                    <span>Đánh giá</span>
                 </div>
             </div>
         </div></div>
@@ -87,7 +87,7 @@
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
                 <div class="contact-text">
-                    <h4>Write your review for: <span th:text="${roomName}">Room Name</span></h4>
+                    <h4>Viết đánh giá của bạn cho: <span th:text="${roomName}">Tên phòng</span></h4>
                 </div>
                 <form th:action="@{/submit-review}" method="post" th:object="${reviewDto}" class="contact-form">
 
@@ -114,9 +114,9 @@
                             </div>
                         </div>
                         <div class="col-lg-12" style="margin-top: 20px;">
-                            <label>Your Comment:</label>
+                            <label>Đánh giá của bạn:</label>
                             <textarea th:field="*{comment}" placeholder="Tell us about your stay..." required></textarea>
-                            <button type="submit">Submit Review</button>
+                            <button type="submit">Gửi</button>
                         </div>
                     </div>
                 </form>

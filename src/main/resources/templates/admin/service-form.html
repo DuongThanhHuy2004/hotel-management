@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title" th:text="${serviceDto.id == null} ? 'Add New Service' : 'Edit Service'">Service Form</h4>
+                    <h4 class="page-title" th:text="${serviceDto.id == null} ? 'Thêm dịch vụ' : 'Sửa dịch vụ'">Thông tin dịch vụ</h4>
                 </div>
             </div>
             <div class="row">
@@ -31,22 +31,22 @@
                                 <input type="hidden" th:field="*{id}">
 
                                 <div class="form-group">
-                                    <label for="name">Service Name</label>
+                                    <label for="name">Tên dịch vụ</label>
                                     <input type="text" class="form-control" id="name" th:field="*{name}" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="price">Price</label>
+                                    <label for="price">Giá</label>
                                     <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
                                 </div>
 
-                                <button type="submit" class="btn btn-light px-5">Save</button>
-                                <a th:href="@{/admin/services}" class="btn btn-light px-5">Cancel</a>
+                                <button type="submit" class="btn btn-light px-5">Lưu</button>
+                                <a th:href="@{/admin/services}" class="btn btn-light px-5">Hủy</a>
                             </form>
                         </div>
                     </div>

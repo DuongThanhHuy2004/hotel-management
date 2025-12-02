@@ -30,10 +30,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(RegisterDto registerDto) {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new RuntimeException("Username is already taken!");
+            throw new RuntimeException("Tài khoản đã tồn tại");
         }
         if (userRepository.existsByEmail(registerDto.getEmail())) {
-            throw new RuntimeException("Email is already taken!");
+            throw new RuntimeException("Email đã tồn tại");
         }
 
         User user = new User();
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Không thể tìm thấy người dùng với ID: " + id));
     }
 
     @Override
@@ -75,10 +75,10 @@ public class UserServiceImpl implements UserService {
         } else {
             user = new User();
             if (userRepository.existsByUsername(userDto.getUsername())) {
-                throw new RuntimeException("Username is already taken!");
+                throw new RuntimeException("Tài khoản đã tồn tại");
             }
             if (userRepository.existsByEmail(userDto.getEmail())) {
-                throw new RuntimeException("Email is already taken!");
+                throw new RuntimeException("Email đã tồn tại");
             }
             user.setProvider(Provider.LOCAL);
         }
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         User user = findUserById(id);
         if ("admin".equals(user.getUsername())) {
-            throw new RuntimeException("Cannot delete admin user!");
+            throw new RuntimeException("Không thể xóa người dùng này");
         }
         user.setRoles(null);
         userRepository.save(user);
@@ -117,13 +117,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         if (user.getProvider() == Provider.LOCAL) {
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-                throw new RuntimeException("Incorrect old password.");
+                throw new RuntimeException("Mật khẩu cũ không đúng.");
             }
         } else {
-            throw new RuntimeException("Users logged in via Social cannot change password here.");
+            throw new RuntimeException("Người dùng đã đăng nhập bằng Google không thể đổi mật khẩu");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);

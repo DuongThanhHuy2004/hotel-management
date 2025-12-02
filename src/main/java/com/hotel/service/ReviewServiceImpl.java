@@ -26,19 +26,19 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void saveReview(ReviewDto reviewDto, String username) {
         Booking booking = bookingRepository.findById(reviewDto.getBookingId())
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+                .orElseThrow(() -> new RuntimeException("Không tim thấy đơn đặt phòng"));
 
         // 1. Kiểm tra bảo mật: Đúng người dùng
         if (!booking.getUser().getUsername().equals(username)) {
-            throw new AccessDeniedException("You cannot review a booking that is not yours.");
+            throw new AccessDeniedException("Bạn không thể đánh giá đơn không phải của bạn");
         }
         // 2. Kiểm tra nghiệp vụ: Đã ở xong
         if (!"CONFIRMED".equals(booking.getStatus()) || booking.getCheckOutDate().isAfter(LocalDate.now())) {
-            throw new RuntimeException("You can only review completed bookings.");
+            throw new RuntimeException("Bạn chỉ có thể bình luận những phòng đã sử dụng");
         }
         // 3. Kiểm tra nghiệp vụ: Chưa review
         if (booking.isHasReviewed()) {
-            throw new RuntimeException("You have already reviewed this booking.");
+            throw new RuntimeException("Bạn đã bình luận");
         }
 
         // Tạo review
@@ -72,13 +72,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public void deleteReview(Long id) {
-        // (Nâng cao: Cần xóa review và set hasReviewed = false cho booking)
-        Review review = reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bình luận"));
         Booking booking = review.getBooking();
         booking.setHasReviewed(false);
+        booking.setReview(null);
         bookingRepository.save(booking);
-        reviewRepository.deleteById(id);
+        reviewRepository.delete(review);
     }
 
     @Override

@@ -4,6 +4,46 @@
 
 <body>
 <header class="header-section" th:fragment="header">
+
+    <style>
+        /* Làm cho menu xổ xuống rộng hơn và căn chỉnh đẹp hơn */
+        .header-configure-area .language-option .flag-dropdown {
+            width: 200px !important; /* Tăng độ rộng (Gốc rất bé) */
+            text-align: left !important; /* Căn trái chữ */
+            padding: 10px 0 !important;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Chỉnh từng dòng menu */
+        .header-configure-area .language-option .flag-dropdown ul li {
+            list-style: none;
+            display: block;
+        }
+
+        .header-configure-area .language-option .flag-dropdown ul li a {
+            padding: 8px 20px !important; /* Tạo khoảng cách thoáng */
+            display: block !important;
+            color: #19191a !important;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        /* Hiệu ứng khi di chuột vào */
+        .header-configure-area .language-option .flag-dropdown ul li a:hover {
+            background-color: #dfa974; /* Màu vàng cam chủ đạo */
+            color: #ffffff !important;
+            padding-left: 25px !important; /* Hiệu ứng đẩy chữ sang phải */
+        }
+
+        /* Sửa icon user */
+        .user-icon-custom {
+            color: #dfa974;
+            margin-right: 5px;
+            font-size: 16px;
+        }
+    </style>
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -15,23 +55,44 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="tn-right">
-                        <a th:href="@{/rooms}" class="bk-btn">Booking Now</a> <div class="language-option">
-                        <i class="fa fa-user" style="color: #dfa974; margin-right: 5px;"></i> <span>Account <i class="fa fa-angle-down"></i></span>
-                        <div class="flag-dropdown">
-                            <ul>
-                                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Log In</a></li>
-                                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
 
-                                <li sec:authorize="isAuthenticated()"><a th:href="@{/my-bookings}">My Bookings</a></li>
-                                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
-                                <li sec:authorize="isAuthenticated()">
-                                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">
-                                        Log Out
-                                    </a>
-                                </li>
-                            </ul>
+                        <a th:href="@{/rooms}" class="bk-btn">Đặt Phòng Ngay</a>
+
+                        <div class="language-option">
+                            <i class="fa fa-user user-icon-custom"></i>
+
+                            <span sec:authorize="isAuthenticated()">
+                                Tài khoản <i class="fa fa-angle-down"></i>
+                            </span>
+                            <span sec:authorize="!isAuthenticated()">
+                                Tài khoản <i class="fa fa-angle-down"></i>
+                            </span>
+
+                            <div class="flag-dropdown">
+                                <ul>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}"><i class="fa fa-sign-in mr-2"></i> Đăng nhập</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/register}"><i class="fa fa-user-plus mr-2"></i> Đăng ký</a>
+                                    </li>
+
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/my-bookings}"><i class="fa fa-list-alt mr-2"></i> Lịch sử đặt phòng</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/profile}"><i class="fa fa-id-card-o mr-2"></i> Hồ sơ cá nhân</a>
+                                    </li>
+
+                                    <li sec:authorize="isAuthenticated()" style="border-top: 1px solid #eee; margin-top: 5px;">
+                                        <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">
+                                            <i class="fa fa-power-off mr-2"></i> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+
                     </div>
                 </div>
             </div>
@@ -42,7 +103,8 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="logo">
-                        <a th:href="@{/}"> <img th:src="@{/sona/img/logo.png}" alt="">
+                        <a th:href="@{/}">
+                            <img th:src="@{/sona/img/logo.png}" alt="">
                         </a>
                     </div>
                 </div>
@@ -50,13 +112,9 @@
                     <div class="nav-menu">
                         <nav class="mainmenu">
                             <ul>
-                                <li class="active"><a th:href="@{/}">Home</a></li>
-                                <li><a th:href="@{/rooms}">Rooms</a></li>
-                                <li><a th:href="@{/contact}">Contact</a></li>
-
-                                <li sec:authorize="!isAuthenticated()">
-                                    <a th:href="@{/login}">Login</a>
-                                </li>
+                                <li class="active"><a th:href="@{/}">Trang Chủ</a></li>
+                                <li><a th:href="@{/rooms}">Phòng</a></li>
+                                <li><a th:href="@{/contact}">Liên Hệ</a></li>
                             </ul>
                         </nav>
                         <div class="nav-right search-switch">

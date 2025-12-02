@@ -22,7 +22,7 @@ public class Room {
     @Lob
     private String description;
 
-    private String imageUrl; // Sẽ lưu đường dẫn tới ảnh
+    private String imageUrl;
 
     private boolean isAvailable = true;
 

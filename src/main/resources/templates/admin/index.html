@@ -24,7 +24,7 @@
                                     <span class="float-right"><i class="fa fa-shopping-cart"></i></span>
                                 </h5>
                                 <br>
-                                <p class="mb-0 text-white small-font">Pending Orders</p>
+                                <h5>Đơn Chờ Duyệt</h5>
                             </div>
                         </div>
 
@@ -35,7 +35,7 @@
                                     <span class="float-right"><i class="fa fa-usd"></i></span>
                                 </h5>
                                 <br>
-                                <p class="mb-0 text-white small-font">Total Revenue (Confirmed)</p>
+                                <h5>Doanh Thu</h5>
                             </div>
                         </div>
 
@@ -46,7 +46,7 @@
                                     <span class="float-right"><i class="fa fa-users"></i></span>
                                 </h5>
                                 <br>
-                                <p class="mb-0 text-white small-font">Total Users</p>
+                                <h5>Tài Khoản</h5>
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                                     <span class="float-right"><i class="fa fa-envelope"></i></span>
                                 </h5>
                                 <br>
-                                <p class="mb-0 text-white small-font">Unread Messages</p>
+                                <h5>Tin Nhắn Chưa Đọc</h5>
                             </div>
                         </div>
 
@@ -69,7 +69,6 @@
                 <div class="col-12 col-lg-8 col-xl-8">
                     <div class="card">
                         <div class="card-header">
-                            Site Traffic
                             <div class="card-action">
                                 <select id="yearSelect" class="form-control form-control-sm"
                                         style="background: rgba(255,255,255,0.2); color: white; border: none; cursor: pointer;">
@@ -84,33 +83,14 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-inline">
-                                <li class="list-inline-item"><i class="fa fa-circle mr-2 text-white"></i>Monthly Revenue</li>
+                                <li class="list-inline-item"><i class="fa fa-circle mr-2 text-white"></i>Doanh Thu Tháng</li>
                             </ul>
                             <div class="chart-container-1">
                                 <canvas id="chart1"></canvas>
                             </div>
                         </div>
 
-                        <div class="row m-0 row-group text-center border-top border-light-3">
-                            <div class="col-12 col-lg-4">
-                                <div class="p-3">
-                                    <h5 class="mb-0">45.87M</h5>
-                                    <small class="mb-0">Overall Visitor <span> <i class="fa fa-arrow-up"></i> 2.43%</span></small>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-4">
-                                <div class="p-3">
-                                    <h5 class="mb-0">15:48</h5>
-                                    <small class="mb-0">Visitor Duration <span> <i class="fa fa-arrow-up"></i> 12.65%</span></small>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-4">
-                                <div class="p-3">
-                                    <h5 class="mb-0">245.65</h5>
-                                    <small class="mb-0">Pages/Visit <span> <i class="fa fa-arrow-up"></i> 5.62%</span></small>
-                                </div>
-                            </div>
-                        </div>
+
 
                     </div>
                 </div>
@@ -240,7 +220,7 @@
 
         // 2. Xử lý Biểu đồ Tròn (Giữ nguyên, không đổi)
         var chartTitleEl = document.getElementById("weeklySalesChartTitle");
-        if(chartTitleEl) chartTitleEl.innerText = "Room Type Popularity";
+        if(chartTitleEl) chartTitleEl.innerText = "Tỷ lệ kiểu phòng được đặt";
 
         var ctx2 = document.getElementById("chart2");
         if (ctx2) {

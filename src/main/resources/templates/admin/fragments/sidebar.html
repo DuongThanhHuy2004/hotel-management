@@ -6,62 +6,62 @@
         </a>
     </div>
     <ul class="sidebar-menu do-nicescrol">
-        <li class="sidebar-header">MAIN NAVIGATION</li>
+        <li class="sidebar-header"></li>
         <li>
             <a th:href="@{/admin/dashboard}">
-                <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
+                <i class="zmdi zmdi-view-dashboard"></i> <span>Bảng điều khiển</span>
             </a>
         </li>
 
         <li>
             <a th:href="@{/admin/room-types}">
-                <i class="zmdi zmdi-view-list"></i> <span>Room Type Management</span>
+                <i class="zmdi zmdi-view-list"></i> <span>Loại Phòng</span>
             </a>
         </li>
 
         <li>
             <a th:href="@{/admin/rooms}">
-                <i class="zmdi zmdi-hotel"></i> <span>Room Management</span>
+                <i class="zmdi zmdi-hotel"></i> <span>Phòng</span>
             </a>
         </li>
 
         <li>
             <a th:href="@{/admin/bookings}">
-                <i class="zmdi zmdi-book"></i> <span>Bookings</span>
+                <i class="zmdi zmdi-book"></i> <span>Đơn Đặt Phòng</span>
             </a>
         </li>
 
         <li>
             <a th:href="@{/admin/services}">
-                <i class="zmdi zmdi-shopping-basket"></i> <span>Service Management</span>
+                <i class="zmdi zmdi-shopping-basket"></i> <span>Dịch Vụ</span>
             </a>
         </li>
 
-        <li>
+        <li sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin/users}">
-                <i class="zmdi zmdi-face"></i> <span>User Management</span>
+                <i class="zmdi zmdi-face"></i> <span>Tài Khoản</span>
             </a>
         </li>
 
-        <li>
+        <li sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin/payments}">
-                <i class="zmdi zmdi-money-box"></i> <span>Payments</span>
+                <i class="zmdi zmdi-money-box"></i> <span>Lịch Sử Thanh Toán</span>
             </a>
         </li>
 
         <li>
             <a th:href="@{/admin/contacts}">
-                <i class="zmdi zmdi-email"></i> <span>Contact Messages</span>
+                <i class="zmdi zmdi-email"></i> <span>Tin Nhắn Liên Hệ</span>
             </a>
         </li>
         <li>
             <a th:href="@{/admin/reviews}">
-                <i class="zmdi zmdi-star"></i> <span>Reviews</span>
+                <i class="zmdi zmdi-star"></i> <span>Bình Luận</span>
             </a>
         </li>
         <li>
             <a th:href="@{/admin/calendar}">
-                <i class="zmdi zmdi-calendar-check"></i> <span>Booking Calendar</span>
+                <i class="zmdi zmdi-calendar-check"></i> <span>Lịch Đặt Phòng</span>
             </a>
         </li>
     </ul>

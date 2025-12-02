@@ -29,10 +29,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>My Bookings</h2>
+                    <h2>Lịch Sử Đặt Phòng</h2>
                     <div class="bt-option">
-                        <a th:href="@{/}">Home</a>
-                        <span>My Bookings</span>
+                        <a th:href="@{/}">Trang Chủ</a>
+                        <span>Lịch sử đặt phòng</span>
                     </div>
                 </div>
             </div>
@@ -50,17 +50,17 @@
 
     <div class="row">
 
-        <div class="col-lg-12" th:if="${bookingPage.empty}"> <p>You have no bookings yet. <a th:href="@{/rooms}">Find a room now!</a></p>
+        <div class="col-lg-12" th:if="${bookingPage.empty}"> <p>Bạn chưa đặt phòng. <a th:href="@{/rooms}">Đặt ngay!</a></p>
         </div>
 
         <div class="col-lg-6 col-md-6" th:each="b : ${bookingPage.content}"> <div class="room-item">
             <img th:src="@{${b.room.imageUrl}}" alt="Room Image">
             <div class="ri-text">
                 <h4 th:text="${b.room.roomType.name}">Deluxe Room</h4>
-                <h3><span th:text="${#numbers.formatDecimal(b.totalPrice, 1, 2)}">...</span>$
-                    <span style="font-size: 16px; font-weight: 400;">/ Total</span>
+                <h3>
+                    [[${#numbers.formatDecimal(b.totalPrice, 0, 'COMMA', 0, 'POINT')}]]
+                    <span style="font-size: 16px; font-weight: 400;">VND/Tổng</span>
                 </h3>
-
                 <table>
                     <tbody>
                     <tr>
@@ -72,18 +72,17 @@
                         <td th:text="${b.checkOutDate}">2025-10-30</td>
                     </tr>
                     <tr>
-                        <td class="r-o">Status:</td>
+                        <td class="r-o">Trạng thái:</td>
                         <td>
                                     <span th:text="${b.status}"
                                           th:classappend="${b.status == 'PENDING'} ? 'text-warning' :
                                                           (${b.status == 'CONFIRMED'} ? 'text-success' : 'text-danger')"
                                           style="font-weight: bold;">
-                                        PENDING
                                     </span>
                         </td>
                     </tr>
                     <tr th:if="${!b.services.isEmpty()}">
-                        <td class="r-o" style="vertical-align: top;">Services:</td>
+                        <td class="r-o" style="vertical-align: top;">Dịch vụ:</td>
                         <td style="font-size: 0.9em;">
                                     <span th:each="s, iterStat : ${b.services}"
                                           th:text="${s.name} + (${iterStat.last} ? '' : ', ')"></span>
@@ -97,14 +96,14 @@
                     <a th:if="${b.status == 'PENDING'}"
                        th:href="@{/payment/create-payment/{bookingId}(bookingId=${b.id})}"
                        class="btn btn-warning btn-sm">
-                        Pay Now
+                        Thanh toán
                     </a>
 
                     <a th:if="${b.status == 'PENDING'}"
                        th:href="@{/booking/cancel/{id}(id=${b.id})}"
                        class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure you want to cancel this booking?')">
-                        Cancel
+                        Hủy
                     </a>
 
                     <a th:if="${b.status == 'CONFIRMED' and
@@ -112,10 +111,10 @@
                                        !b.hasReviewed}"
                        th:href="@{/write-review/{id}(id=${b.id})}"
                        class="btn btn-success btn-sm">
-                        Write a Review
+                        Đánh giá
                     </a>
 
-                    <span th:if="${b.hasReviewed}" class="text-success" style="font-weight: bold; display: block; text-align: center; padding: 10px;">✓ Reviewed</span>
+                    <span th:if="${b.hasReviewed}" class="text-success" style="font-weight: bold; display: block; text-align: center; padding: 10px;">✓ Đã đánh giá</span>
                 </div>
             </div>
         </div>

@@ -31,7 +31,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact findById(Long id) {
         return contactRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contact message not found"));
+                .orElseThrow(() -> new RuntimeException("Tin nhắn liên hệ không khả dụng"));
     }
 
     @Override

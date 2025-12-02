@@ -20,12 +20,12 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
-                                        <th>From</th>
+                                        <th>Từ</th>
                                         <th>Email</th>
-                                        <th>Subject</th>
-                                        <th>Received At</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Chủ Đề</th>
+                                        <th>Ngày</th>
+                                        <th>Trạng thái</th>
+                                        <th>Chức năng</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -36,7 +36,7 @@
                                         <td th:text="${#temporals.format(c.sentAt, 'dd/MM/yyyy HH:mm')}">...</td>
                                         <td th:text="${c.read} ? 'Read' : 'Unread'">...</td>
                                         <td>
-                                            <a th:href="@{/admin/contacts/view/{id}(id=${c.id})}" class="btn btn-light btn-sm">View</a>
+                                            <a th:href="@{/admin/contacts/view/{id}(id=${c.id})}" class="btn btn-light btn-sm">Hiển thị</a>
                                         </td>
                                     </tr>
                                     <tr th:if="${contactPage.empty}">

@@ -45,7 +45,10 @@
                     <div class="auth-form">
                         <h3>Create Your Account</h3>
                         <div th:if="${param.success}">
-                            <div class="alert alert-info">You've successfully registered!</div>
+                            <div class="alert alert-info">Đăng ký thành công</div>
+                        </div>
+                        <div th:if="${error}" class="alert alert-danger">
+                            <span th:text="${error}"></span>
                         </div>
                         <form th:action="@{/register/save}" th:object="${user}" role="form" method="post">
                             <div class="form-group">

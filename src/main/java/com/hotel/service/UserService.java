@@ -5,7 +5,6 @@ import com.hotel.dto.UserDto;
 import com.hotel.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.hotel.enums.Provider;
 
 public interface UserService {
     void saveUser(RegisterDto registerDto);

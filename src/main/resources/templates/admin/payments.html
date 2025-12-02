@@ -11,7 +11,7 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
-                <div class="col-sm-9"><h4 class="page-title">Payment Transaction Log</h4></div>
+                <div class="col-sm-9"><h4 class="page-title">Lịch Sử Giao Dịch</h4></div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -23,11 +23,11 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Booking ID</th>
-                                        <th>User</th>
-                                        <th>Amount</th>
+                                        <th>Tài khoản</th>
+                                        <th>Tổng tiền</th>
                                         <th>Transaction Code</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
+                                        <th>Ngày</th>
+                                        <th>Trạng thái</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -46,7 +46,7 @@
                                         </td>
                                     </tr>
                                     <tr th:if="${paymentPage.empty}">
-                                        <td colspan="7" class="text-center">No payments found.</td>
+                                        <td colspan="7" class="text-center">Chưa có thanh toán</td>
                                     </tr>
                                     </tbody>
                                 </table>

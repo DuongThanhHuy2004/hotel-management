@@ -25,7 +25,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public HotelService findById(Long id) {
         return serviceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy dịch vụ"));
     }
 
     @Override

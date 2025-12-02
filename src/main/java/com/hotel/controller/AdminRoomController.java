@@ -40,7 +40,7 @@ public class AdminRoomController {
     public String showCreateForm(Model model) {
         model.addAttribute("roomDto", new RoomDto());
         model.addAttribute("allRoomTypes", roomTypeService.findAll());
-        return "admin/room-form"; // (Sẽ tạo view ở bước 8)
+        return "admin/room-form";
     }
 
     @GetMapping("/edit/{id}")

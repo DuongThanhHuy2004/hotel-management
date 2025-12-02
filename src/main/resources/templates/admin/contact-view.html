@@ -18,18 +18,18 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
-                <div class="col-sm-9"><h4 class="page-title">View Message</h4></div>
+                <div class="col-sm-9"><h4 class="page-title">Lời nhắn</h4></div>
                 <div class="col-sm-3">
-                    <a th:href="@{/admin/contacts}" class="btn btn-light float-sm-right">Back to Inbox</a>
+                    <a th:href="@{/admin/contacts}" class="btn btn-light float-sm-right">Quay lại</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Subject: <span th:text="${contact.subject}"></span></h5>
-                            <p><strong>From:</strong> <span th:text="${contact.fullName}"></span> (<span th:text="${contact.email}"></span>)</p>
-                            <p><strong>Received:</strong> <span th:text="${#temporals.format(contact.sentAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+                            <h5 class="card-title">Chủ đề: <span th:text="${contact.subject}"></span></h5>
+                            <p><strong>Từ:</strong> <span th:text="${contact.fullName}"></span> (<span th:text="${contact.email}"></span>)</p>
+                            <p><strong>Ngày:</strong> <span th:text="${#temporals.format(contact.sentAt, 'dd/MM/yyyy HH:mm')}"></span></p>
                             <hr>
                             <pre style="white-space: pre-wrap; font-family: inherit; color: #FFFFFF;" th:text="${contact.message}">Message content...</pre>
                         </div>

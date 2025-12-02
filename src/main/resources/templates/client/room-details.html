@@ -58,11 +58,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2 th:text="${room.roomType.name}">Room Details</h2>
+                    <h2 th:text="${room.roomType.name}">Chi Tiết Phòng</h2>
                     <div class="bt-option">
-                        <a th:href="@{/}">Home</a>
-                        <a th:href="@{/rooms}">Rooms</a>
-                        <span th:text="${room.roomType.name}">Room Details</span>
+                        <a th:href="@{/}">Trang chủ</a>
+                        <a th:href="@{/rooms}">Phòng</a>
+                        <span th:text="${room.roomType.name}">Chi tiết phòng</span>
                     </div>
                 </div>
             </div>
@@ -79,11 +79,14 @@
                         <div class="rd-title">
                             <h3 th:text="${room.roomType.name}">Premium King Room</h3>
                         </div>
-                        <h2><span th:text="${#numbers.formatDecimal(room.price, 1, 2)}">159</span>$/Pernight</h2>
+                        <h2>
+                            [[${#numbers.formatDecimal(room.price, 0, 'COMMA', 0, 'POINT')}]]
+                            <span>VND/Đêm</span>
+                        </h2>
                         <table>
                             <tbody>
                             <tr>
-                                <td class="r-o">Room Number:</td>
+                                <td class="r-o">Số phòng:</td>
                                 <td th:text="${room.roomNumber}">101</td>
                             </tr>
                             </tbody>
@@ -92,22 +95,23 @@
                     </div>
                 </div>
 
-                <div class="rd-reviews" style="margin-top: 30px;"> <h4>Reviews</h4>
+                <div class="rd-reviews" style="margin-top: 30px;"> <h4>Bình luận</h4>
                     <div class="review-item" th:if="${!reviews.isEmpty()}">
                         <h5>Average Rating: <span th:text="${#numbers.formatDecimal(averageRating, 1, 1)}">0.0</span> / 5</h5>
                     </div>
                     <div class="review-item" th:if="${reviews.isEmpty()}">
-                        <p>This room has no reviews yet.</p>
+                        <p>Chưa có bình luận.</p>
                     </div>
 
                     <div class="review-item" th:each="review : ${reviews}">
                         <div class="ri-text"> <span><span th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}"></span></span>
                             <div class="rating">
                                 <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fa fa-star"></i>
-                                <i th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="fa fa-star-o"></i>
+                                <i th:if="${review.rating < 5}"
+                                        th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="fa fa-star-o"></i>
                             </div>
-                            <h5 th:text="${review.user.username}">User Name</h5>
-                            <p th:text="${review.comment}">Comment...</p>
+                            <h5 th:text="${review.user.username}">Tài Khoản</h5>
+                            <p th:text="${review.comment}">Bình luận...</p>
                         </div>
                     </div>
                 </div>
@@ -116,12 +120,12 @@
 
             <div class="col-lg-4">
                 <div class="room-booking">
-                    <h3>Your Reservation</h3>
+                    <h3>Đặt Phòng Ngay</h3>
 
                     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
                     <div sec:authorize="!isAuthenticated()">
-                        <p>Please <a th:href="@{/login}">login</a> to book this room.</p>
+                        <p>Hãy <a th:href="@{/login}">đăng nhập</a> để đặt phòng.</p>
                     </div>
 
                     <form th:action="@{/booking/create}" method="post" sec:authorize="isAuthenticated()">
@@ -140,7 +144,7 @@
                         </div>
 
                         <div class="select-option" style="margin-top: 20px;" th:if="${!allServices.isEmpty()}">
-                            <label>Add Services:</label>
+                            <label>Thêm dịch vụ:</label>
                             <div th:each="service : ${allServices}" class="form-check" style="color: white; padding-left: 2em;">
                                 <input class="form-check-input" type="checkbox"
                                        name="serviceIds" th:value="${service.id}"
@@ -151,7 +155,7 @@
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" style="margin-top: 20px;">Book Now</button>
+                        <button type="submit" style="margin-top: 20px;">Đặt Ngay</button>
                     </form>
                 </div>
             </div>

@@ -37,7 +37,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             return uploadResult.get("secure_url").toString();
 
         } catch (IOException e) {
-            throw new RuntimeException("Error uploading file to Cloudinary", e);
+            throw new RuntimeException("Lỗi tải file lên Cloudinary", e);
         }
     }
 

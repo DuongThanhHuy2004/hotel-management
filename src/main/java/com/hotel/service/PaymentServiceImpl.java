@@ -30,8 +30,6 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    // (Hàm private hmacSHA512 ĐÃ BỊ XÓA, vì đã chuyển sang HashUtils)
-
     private String getIpAddress(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {
@@ -44,10 +42,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String createPaymentUrl(Long bookingId, HttpServletRequest request) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn đặt phòng"));
 
         if (!"PENDING".equals(booking.getStatus())) {
-            throw new RuntimeException("Booking is not in PENDING state");
+            throw new RuntimeException("Đơn đặt phòng không ở trong trạng thái chờ");
         }
 
         long amount = (long) (booking.getTotalPrice() * 100);
@@ -96,13 +94,8 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
 
-        // Xóa dấu & cuối cùng
         query.deleteCharAt(query.length() - 1);
         hashData.deleteCharAt(hashData.length() - 1);
-
-        // ===================================
-        // SỬA LỖI Ở ĐÂY (Gọi HashUtils)
-        // ===================================
         String vnp_SecureHash = HashUtils.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
 
         query.append("&vnp_SecureHash=");
@@ -136,10 +129,6 @@ public class PaymentServiceImpl implements PaymentService {
             hashData.append('&');
         }
         hashData.deleteCharAt(hashData.length() - 1);
-
-        // ===================================
-        // SỬA LỖI Ở ĐÂY (Gọi HashUtils)
-        // ===================================
         String calculatedHash = HashUtils.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
 
         if (calculatedHash.equals(vnp_SecureHash)) {
@@ -162,7 +151,7 @@ public class PaymentServiceImpl implements PaymentService {
                 if ("PENDING".equals(booking.getStatus())) {
                     bookingService.confirmBooking(bookingId);
                 }
-                payment.setStatus("SUCCESS");
+                payment.setStatus("CONFIRMED");
                 paymentRepository.save(payment); // Lưu thanh toán
                 return 1; // Thành công
             } else {

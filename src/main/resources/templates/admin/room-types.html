@@ -11,9 +11,9 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div class="row pt-2 pb-2">
-                <div class="col-sm-9"><h4 class="page-title">Room Type Management</h4></div>
+                <div class="col-sm-9"><h4 class="page-title">Quản Lý Loại Phòng</h4></div>
                 <div class="col-sm-3">
-                    <a th:href="@{/admin/room-types/new}" class="btn btn-light float-sm-right">Add New Room Type</a>
+                    <a th:href="@{/admin/room-types/new}" class="btn btn-light float-sm-right">Thêm</a>
                 </div>
             </div>
             <div class="row">
@@ -25,9 +25,9 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Actions</th>
+                                        <th>Tên</th>
+                                        <th>Mô tả</th>
+                                        <th>Chức năng</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -36,9 +36,9 @@
                                         <td th:text="${rt.name}">Standard Single</td>
                                         <td th:text="${rt.description}">...</td>
                                         <td>
-                                            <a th:href="@{/admin/room-types/edit/{id}(id=${rt.id})}" class="btn btn-light btn-sm">Edit</a>
+                                            <a th:href="@{/admin/room-types/edit/{id}(id=${rt.id})}" class="btn btn-light btn-sm">Sửa</a>
                                             <a th:href="@{/admin/room-types/delete/{id}(id=${rt.id})}" class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Delete this room type?')">Delete</a>
+                                               onclick="return confirm('Delete this room type?')">Xóa</a>
                                         </td>
                                     </tr>
                                     <tr th:if="${roomTypePage.empty}">

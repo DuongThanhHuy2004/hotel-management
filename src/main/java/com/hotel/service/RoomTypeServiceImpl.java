@@ -5,8 +5,6 @@ import com.hotel.entity.RoomType;
 import com.hotel.repository.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
-// Import cho Phân trang (Sprint 14)
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -32,7 +30,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     @Override
     public RoomType findById(Long id) {
         return roomTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("RoomType not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy loại phòng"));
     }
 
     @Override

@@ -15,10 +15,10 @@
 
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title" th:text="${roomDto.id == null} ? 'Add New Room' : 'Edit Room'">Room Form</h4>
+                    <h4 class="page-title" th:text="${roomDto.id == null} ? 'Thêm phòng' : 'Sửa phòng'">Thông tin phòng</h4>
                 </div>
                 <div class="col-sm-3">
-                    <a th:href="@{/admin/rooms}" class="btn btn-light float-sm-right">Back to Rooms</a>
+                    <a th:href="@{/admin/rooms}" class="btn btn-light float-sm-right">Quay lại</a>
                 </div>
             </div>
             <div class="row">
@@ -30,14 +30,14 @@
                                   enctype="multipart/form-data"> <input type="hidden" th:field="*{id}">
 
                                 <div class="form-group">
-                                    <label for="roomNumber">Room Number</label>
+                                    <label for="roomNumber">Số phòng</label>
                                     <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="roomTypeId">Room Type</label>
+                                    <label for="roomTypeId">Kiểu phòng</label>
                                     <select class="form-control" id="roomTypeId" th:field="*{roomTypeId}" required>
-                                        <option value="">-- Select Type --</option>
+                                        <option value="">-- Chọn --</option>
                                         <option th:each="rt : ${allRoomTypes}"
                                                 th:value="${rt.id}"
                                                 th:text="${rt.name}">Standard Single</option>
@@ -50,36 +50,36 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Current Image</label>
+                                    <label>Ảnh</label>
                                     <div th:if="${roomDto.id != null and roomDto.imageUrl != null}">
                                         <img th:src="@{${roomDto.imageUrl}}" width="150" alt="Current Image">
                                     </div>
                                     <div th:if="${roomDto.id == null or roomDto.imageUrl == null}">
-                                        <p>(No image)</p>
+                                        <p>(Trống)</p>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="imageFile">Upload New Image</label>
+                                    <label for="imageFile">Tải lên ảnh mới</label>
                                     <input type="file" class="form-control" id="imageFile" name="imageFile"
                                            accept="image/png, image/jpeg">
-                                    <small th:if="${roomDto.id != null}" class="form-text text-muted">Leave blank to keep the current image.</small>
+                                    <small th:if="${roomDto.id != null}" class="form-text text-muted">Để trống sẽ giữ ảnh hiện tại.</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="isAvailable" th:field="*{available}">
                                     <label class="form-check-label" for="isAvailable">
-                                        Is Available
+                                        Trạng thái
                                     </label>
                                 </div>
 
                                 <div class="form-group" style="margin-top: 20px;">
-                                    <button type="submit" class="btn btn-light px-5">Save</button>
-                                    <a th:href="@{/admin/rooms}" class="btn btn-light px-5">Cancel</a>
+                                    <button type="submit" class="btn btn-light px-5">Lưu</button>
+                                    <a th:href="@{/admin/rooms}" class="btn btn-light px-5">Hủy</a>
                                 </div>
                             </form>
 

@@ -11,8 +11,6 @@ import java.util.List;
 public interface RoomService {
     Page<Room> findAll(Pageable pageable);
     Page<Room> findAvailableRooms(LocalDate checkIn, LocalDate checkOut, Pageable pageable);
-
-    // (Các hàm còn lại giữ nguyên)
     Room findById(Long id);
     void save(RoomDto dto, MultipartFile imageFile);
     void deleteById(Long id);

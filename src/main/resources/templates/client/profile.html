@@ -89,7 +89,7 @@
         <div class="row">
             <div class="col-lg-6 offset-lg-3">
                 <div class="contact-text">
-                    <h2>Change Password</h2>
+                    <h2>Đổi mật khẩu</h2>
                 </div>
 
                 <form th:action="@{/profile/change-password}" method="post" th:object="${passwordDto}" class="contact-form">
@@ -99,16 +99,16 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <input type="password" th:field="*{oldPassword}" placeholder="Current Password" required>
+                            <input type="password" th:field="*{oldPassword}" placeholder="Mật khẩu hiện tại" required>
                         </div>
                         <div class="col-lg-12">
-                            <input type="password" th:field="*{newPassword}" placeholder="New Password" required>
+                            <input type="password" th:field="*{newPassword}" placeholder="Mật khẩu mới" required>
                         </div>
                         <div class="col-lg-12">
-                            <input type="password" th:field="*{confirmPassword}" placeholder="Confirm New Password" required>
+                            <input type="password" th:field="*{confirmPassword}" placeholder="Xác nhận lại mật khẩu" required>
                         </div>
                         <div class="col-lg-12">
-                            <button type="submit">Save Changes</button>
+                            <button type="submit">Lưu thay đổi</button>
                         </div>
                     </div>
                 </form>

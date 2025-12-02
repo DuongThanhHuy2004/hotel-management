@@ -50,8 +50,8 @@ public class BookingController {
 
         try {
             bookingService.createBooking(bookingDto, username);
-            redirectAttributes.addFlashAttribute("successMessage", "Your room has been booked successfully! Please wait for admin confirmation.");
-            return "redirect:/my-bookings"; // Sửa: Về trang My Bookings
+            redirectAttributes.addFlashAttribute("successMessage", "Phòng của bạn đã được đặt");
+            return "redirect:/my-bookings";
 
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -71,9 +71,9 @@ public class BookingController {
 
         try {
             bookingService.cancelMyBooking(bookingId, username);
-            redirectAttributes.addFlashAttribute("successMessage", "Booking #" + bookingId + " has been canceled.");
+            redirectAttributes.addFlashAttribute("successMessage", "Booking #" + bookingId + " đã được hủy.");
         } catch (AccessDeniedException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error: You don't have permission to perform this action.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: Bạn không có quyền.");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
